@@ -1,0 +1,46 @@
+name: swiftcel
+description: "Parcel Delivery App."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  go_router: ^17.3.0
+  google_maps_flutter: ^2.18.0
+  firebase_auth: ^6.5.7
+  cloud_firestore: ^6.8.0
+  shared_preferences: ^2.5.5
+  provider: ^6.1.5+1
+  firebase_core: ^4.13.0
+  firebase_analytics: ^12.4.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    #- assets/icons/
+    #- assets/fonts/
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700

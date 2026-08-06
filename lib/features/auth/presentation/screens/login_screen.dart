@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
+import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +18,25 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _keepSignedIn = true;
   bool _obscurePassword = true;
 
+  Future<void> _login() async {
+    final authProvider = context.read<AuthProvider>();
+
+    final success = await authProvider.login(
+      email: _identifierController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    if (!success) {
+      final message = authProvider.errorMessage ?? 'Unable to log in';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    }
+    // No navigation call needed here — see below for why
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             height: 240,
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               // TODO: swap for real shipping-container background image
               gradient: LinearGradient(
                 colors: [Color(0xFF2B2B2B), Color(0xFF4A4A4A)],
@@ -57,9 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    const Spacer(),
+                    Spacer(),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -70,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextSpan(text: 'TRACK, SHIP,\n'),
                           TextSpan(
                             text: 'MANAGE',
-                            style: TextStyle(color: Color(0xFFFF6B5C)),
+                            style: TextStyle(color: AppColors.orangePrimary),
                           ),
                         ],
                       ),
@@ -82,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -135,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Checkbox(
                         value: _keepSignedIn,
-                        activeColor: const Color(0xFFD32F2F),
+                        activeColor: AppColors.orangeSecondary,
                         onChanged: (v) =>
                             setState(() => _keepSignedIn = v ?? true),
                       ),
@@ -158,11 +179,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        context.go('/login');
-                      },
+                      onPressed: _login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
+                        backgroundColor: AppColors.orangePrimary,
                         padding: EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -225,20 +244,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () =>
-                                  context.push('/signup'),
+                              ..onTap = () => context.push('/signup'),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Center(
                     child: TextButton(
                       onPressed: () {
                         // TODO: guest tracking flow
                       },
-                      child: const Text(
+                      child: Text(
                         'Quick Track as Guest →',
                         style: TextStyle(
                           color: Color(0xFFD32F2F),

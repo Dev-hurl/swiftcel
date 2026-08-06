@@ -86,8 +86,7 @@ class AuthProvider extends ChangeNotifier {
         role: role,
       );
       await _firebaseService.sendEmailVerification();
-      _userRole = role;
-      _isLoggedIn = true;
+      
       return true;
     } on FirebaseAuthException catch (e) {
       _errorMessage = _mapFirebaseError(e);
@@ -102,29 +101,22 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> login({required String email, required String password}) async {
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
+  _isLoading = true;
+  _errorMessage = null;
+  notifyListeners();
 
-    try {
-      final cred = await _firebaseService.signIn(
-        email: email,
-        password: password,
-      );
-      _userRole = await _firebaseService.getUserRole(cred.user!.uid);
-      _isLoggedIn = true;
-      return true;
-    } on FirebaseAuthException catch (e) {
-      _errorMessage = _mapFirebaseError(e);
-      return false;
-    } catch (e) {
-      _errorMessage = 'Unable to log in. Please try again.';
-      return false;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  try {
+    await _firebaseService.signIn(email: email, password: password);
+    // Don't set _isLoggedIn/_userRole here — the authStateChanges listener will handle it
+    return true;
+  } catch (e) {
+    _errorMessage = e.toString();
+    return false;
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
 
   Future<void> logout() async {
     await _firebaseService.signOut();

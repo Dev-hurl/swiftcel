@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class OnboardingSlide {
@@ -40,9 +41,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       imagePath: 'assets/images/rider.png',
     ),
     OnboardingSlide(
-      title: 'Smart AI Drone Delivering the Future',
+      title: 'Track in Real-time',
       subtitle:
-          'Empower your deliveries with intelligent drone technology that makes shipping faster, safer, smarter.',
+          'Watch your delivery move across the map. Get precision updates every step of the journey.',
+      imagePath: 'assets/images/track in real time.png',
+    ),
+    OnboardingSlide(
+      title: 'Safe Delivery',
+      subtitle:
+          'Our secure network ensures your parcels arrive exactly as they left. Reliability is our core promise.',
       imagePath: 'assets/images/ai_drone.png',
     ),
   ];
@@ -92,10 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: EdgeInsets.only(left: 24, top: 16),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Image.asset(
-                    'assets/images/white Logo.png',
-                    height: 24,
-                  ),
+                  child: Image.asset('assets/icons/white Logo.png', height: 52),
                 ),
               ),
               Expanded(
@@ -120,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
                           Text(
                             slide.subtitle,
                             style: TextStyle(
@@ -129,12 +133,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               height: 1.4,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          SizedBox(height: 32),
                           Expanded(
                             child: Center(
                               child: Image.asset(
                                 slide.imagePath,
-                                fit: BoxFit.contain,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -144,101 +148,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                 ),
               ),
+              _PageDots(count: _slides.length, currentIndex: _currentPage),
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 24,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _CircleIconButton(
-                      icon: Icons.arrow_back,
-                      onTap: _goToLogin,
-                    ), // skip intro
-                    GestureDetector(
-                      onTap: _onGetStartedPressed,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.08),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              _currentPage == _slides.length - 1
-                                  ? 'Get Started'
-                                  : 'Next',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            _PageDots(
-                              count: _slides.length,
-                              currentIndex: _currentPage,
-                            ),
-                          ],
-                        ),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: _onGetStartedPressed,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: AppColors.orangePrimary,
+                      backgroundColor: AppColors.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 0,
+                      shadowColor: Colors.black.withValues(alpha: 0.08),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
                       ),
                     ),
-                    _CircleIconButton(
-                      icon: Icons.check,
-                      filled: true,
-                      onTap: _goToLogin,
+                    child: Text(
+                      _currentPage == _slides.length - 1
+                          ? 'Get Started'
+                          : 'Next',
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CircleIconButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  final bool filled;
-
-  const _CircleIconButton({
-    required this.icon,
-    required this.onTap,
-    this.filled = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: filled
-              ? Color(0xFFB5C93B)
-              : Colors.transparent, // TODO: swap for your accent hex
-          border: filled ? null : Border.all(color: Colors.black26),
-        ),
-        child: Icon(
-          icon,
-          color: filled ? Colors.white : Colors.black87,
-          size: 20,
         ),
       ),
     );

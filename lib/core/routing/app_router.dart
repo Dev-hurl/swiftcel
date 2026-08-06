@@ -10,13 +10,13 @@ import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 import 'package:swiftcel/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:swiftcel/features/chat/presentation/screens/chat_screen.dart';
 import 'package:swiftcel/features/notifications/presentation/screens/notification_screen.dart';
-import 'package:swiftcel/features/profile/presentation/screens/edit_profile.dart';
-import 'package:swiftcel/features/profile/presentation/screens/profile_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/delivery_history.dart';
 import 'package:swiftcel/features/rider/presentation/screens/document_verification.dart';
 import 'package:swiftcel/features/rider/presentation/screens/earning_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/job_details_screen.dart';
+import 'package:swiftcel/features/rider/presentation/screens/rider_edit_profile.dart';
 import 'package:swiftcel/features/rider/presentation/screens/rider_home.dart';
+import 'package:swiftcel/features/rider/presentation/screens/rider_settings_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/withdraw_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/create_delivery_address_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/create_delivery_parcel_screen.dart';
@@ -24,16 +24,18 @@ import 'package:swiftcel/features/sender/presentation/screens/create_delivery_re
 import 'package:swiftcel/features/sender/presentation/screens/order_history_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/payment_methods.dart';
 import 'package:swiftcel/features/sender/presentation/screens/saved_addresses_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/sender_edit_profile.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_home.dart';
+import 'package:swiftcel/features/sender/presentation/screens/sender_settings_screen.dart';
 import 'package:swiftcel/features/support/presentation/screens/support_screen.dart';
 
 class AppRouter {
   static const bool debugMode = true;
-  static const String debugInitialLocation = '/sender/histo';
+  static const String debugInitialLocation = '/sender/edit-profile';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
-      initialLocation: debugMode ? debugInitialLocation : '/splash',
+      initialLocation: debugMode ? debugInitialLocation : '/onboarding',
       refreshListenable: authProvider,
       redirect: (context, state) {
         if (debugMode) return null;
@@ -54,9 +56,6 @@ class AppRouter {
           path: '/forgot-password',
           builder: (_, _) => ForgotPasswordScreen(),
         ),
-
-        // ---- Shared routes (pushed on top, either role) ----
-        GoRoute(path: '/edit-profile', builder: (_, _) => EditProfile()),
         GoRoute(
           path: '/notifications',
           builder: (_, _) => NotificationsScreen(),
@@ -97,8 +96,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/sender/profile',
-                  builder: (_, _) => ProfileScreen(),
+                  path: '/sender/settings',
+                  builder: (_, _) => SenderSettingsScreen(),
                 ),
               ],
             ),
@@ -118,11 +117,7 @@ class AppRouter {
           path: '/sender/create-delivery/review',
           builder: (_, _) => CreateDeliveryReviewScreen(),
         ),
-        /*GoRoute(
-          path: '/sender/finding-rider/:deliveryId',
-          builder: (_, state) =>
-              FindingRider(deliveryId: state.pathParameters['deliveryId']!),
-        ),
+        /*
         GoRoute(
           path: '/sender/delivery/:deliveryId',
           builder: (_, state) => DeliveryDetailsScreen(
@@ -141,6 +136,10 @@ class AppRouter {
         GoRoute(
           path: '/sender/payment-methods',
           builder: (_, _) => PaymentMethods(),
+        ),
+        GoRoute(
+          path: '/sender/edit-profile',
+          builder: (_, _) => SenderEditProfile(),
         ),
 
         // ---- Rider shell (bottom nav: Home, History, Profile) ----
@@ -167,8 +166,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/rider/profile',
-                  builder: (_, _) => ProfileScreen(),
+                  path: '/rider/settings',
+                  builder: (_, _) => RiderSettingsScreen(),
                 ),
               ],
             ),
@@ -197,6 +196,10 @@ class AppRouter {
         GoRoute(
           path: '/rider/document-verification',
           builder: (_, _) => DocumentVerification(),
+        ),
+        GoRoute(
+          path: '/rider/edit-profile',
+          builder: (_, _) => RiderEditProfile(),
         ),
       ],
     );

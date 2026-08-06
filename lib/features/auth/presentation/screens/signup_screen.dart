@@ -113,10 +113,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 28,
                 ),
@@ -185,7 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(height: 24),
 
                       _FieldLabel('Full Name'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextFormField(
                         controller: _nameController,
                         validator: (value) {
@@ -199,10 +199,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           icon: Icons.badge_outlined,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18),
 
                       _FieldLabel('Email Address'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -222,10 +222,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           icon: Icons.mail_outline,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18),
 
                       _FieldLabel('Phone Number'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextFormField(
                         controller: _phoneController,
                         keyboardType: TextInputType.phone,
@@ -243,10 +243,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           icon: Icons.phone_iphone,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18),
 
                       _FieldLabel('Password'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
@@ -275,7 +275,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +302,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   height: 1.4,
                                 ),
                                 children: [
-                                  const TextSpan(text: 'I agree to the '),
+                                  TextSpan(text: 'I agree to the '),
                                   TextSpan(
                                     text: 'Terms of Service',
                                     style: const TextStyle(
@@ -314,7 +314,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         // TODO: open Terms of Service
                                       },
                                   ),
-                                  const TextSpan(text: ' and '),
+                                  TextSpan(text: ' and '),
                                   TextSpan(
                                     text: 'Privacy Policy',
                                     style: const TextStyle(
@@ -326,7 +326,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         // TODO: open Privacy Policy
                                       },
                                   ),
-                                  const TextSpan(text: '.'),
+                                  TextSpan(text: '.'),
                                 ],
                               ),
                             ),
@@ -334,8 +334,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                       if (_showTermsError) ...[
-                        const SizedBox(height: 6),
-                        const Padding(
+                        SizedBox(height: 6),
+                        Padding(
                           padding: EdgeInsets.only(left: 34),
                           child: Text(
                             'You must agree to continue',

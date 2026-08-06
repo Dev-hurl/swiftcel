@@ -29,11 +29,11 @@ import 'package:swiftcel/features/support/presentation/screens/support_screen.da
 
 class AppRouter {
   static const bool debugMode = true;
-  static const String debugInitialLocation = '/signup';
+  static const String debugInitialLocation = '/sender/histo';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
-      initialLocation: debugMode ? debugInitialLocation : '/rider/home',
+      initialLocation: debugMode ? debugInitialLocation : '/splash',
       refreshListenable: authProvider,
       redirect: (context, state) {
         if (debugMode) return null;
@@ -91,7 +91,7 @@ class AppRouter {
                 GoRoute(
                   path: '/sender/chat',
                   builder: (_, _) => ChatListScreen(),
-                ), // NEW — see note below
+                ),
               ],
             ),
             StatefulShellBranch(

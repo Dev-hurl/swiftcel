@@ -13,10 +13,12 @@ class SupportScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
                   backgroundColor: Color(0xFFEEEEEE),
-                ), // TODO: user avatar
+                  child: Image.asset('assets/images/blue Logo  only.png'),
+                ),
+
                 const SizedBox(width: 8),
                 const Text(
                   'SwiftCel',
@@ -105,11 +107,11 @@ class SupportScreen extends StatelessWidget {
                 color: Colors.black45,
               ),
             ),
-            const SizedBox(height: 10),
+             SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding:  EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFD32F2F),
+                color:  Color(0xFFD32F2F),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -121,14 +123,14 @@ class SupportScreen extends StatelessWidget {
                       color: Colors.white.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.chat_bubble_outline,
                       color: Colors.white,
                       size: 18,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                   SizedBox(width: 12),
+                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -146,7 +148,7 @@ class SupportScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(
+                   Icon(
                     Icons.arrow_forward,
                     color: Colors.white,
                     size: 18,
@@ -154,7 +156,7 @@ class SupportScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+             SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
@@ -163,7 +165,7 @@ class SupportScreen extends StatelessWidget {
                     label: 'Call Us',
                   ),
                 ),
-                const SizedBox(width: 12),
+                 SizedBox(width: 12),
                 Expanded(
                   child: _ContactButton(
                     icon: Icons.mail_outline,
@@ -178,7 +180,7 @@ class SupportScreen extends StatelessWidget {
     );
   }
 
-  static const _articles = [
+  static  const _articles = [
     'My package is delayed, what now?',
     'How to change delivery address',
     'I received a damaged item',
@@ -203,7 +205,7 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding:  EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -220,25 +222,25 @@ class _CategoryCard extends StatelessWidget {
             ),
             child: Icon(icon, size: 20),
           ),
-          const SizedBox(height: 10),
+           SizedBox(height: 10),
           Text(
             title,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style:  TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 2),
+           SizedBox(height: 2),
           Text(
             subtitle,
-            style: const TextStyle(fontSize: 12, color: Colors.black54),
+            style:  TextStyle(fontSize: 12, color: Colors.black54),
           ),
           if (chips != null) ...[
-            const SizedBox(height: 10),
+             SizedBox(height: 10),
             Wrap(
               spacing: 8,
               children: chips!
                   .map(
                     (c) => Chip(
-                      label: Text(c, style: const TextStyle(fontSize: 11)),
-                      backgroundColor: const Color(0xFFF0F0F0),
+                      label: Text(c, style:  TextStyle(fontSize: 11)),
+                      backgroundColor:  Color(0xFFF0F0F0),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   )
@@ -258,27 +260,27 @@ class _ArticleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      margin:  EdgeInsets.only(bottom: 8),
+      padding:  EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          const Icon(
+           Icon(
             Icons.description_outlined,
             size: 18,
             color: Color(0xFFD32F2F),
           ),
-          const SizedBox(width: 10),
+           SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              style:  TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
             ),
           ),
-          const Icon(Icons.chevron_right, size: 18, color: Colors.black38),
+           Icon(Icons.chevron_right, size: 18, color: Colors.black38),
         ],
       ),
     );
@@ -293,7 +295,7 @@ class _ContactButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding:  EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -301,11 +303,11 @@ class _ContactButton extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(icon, color: const Color(0xFFD32F2F), size: 20),
-          const SizedBox(height: 6),
+          Icon(icon, color:  Color(0xFFD32F2F), size: 20),
+           SizedBox(height: 6),
           Text(
             label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            style:  TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
         ],
       ),

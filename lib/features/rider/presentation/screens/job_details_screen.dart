@@ -117,7 +117,7 @@ class JobDetailsScreen extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                color: const Color(0xFFDCEEFB),
+                color: Color(0xFFDCEEFB),
               ),
               child: Stack(
                 children: [
@@ -163,10 +163,10 @@ class JobDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -188,14 +188,14 @@ class JobDetailsScreen extends StatelessWidget {
                             height: 36,
                             color: Colors.grey.shade300,
                           ),
-                          const Icon(
+                          Icon(
                             Icons.location_on,
                             size: 14,
                             color: Color(0xFF2E7D32),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,10 +378,10 @@ class JobDetailsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
 
             Container(
-              padding: const EdgeInsets.all(16),
+              padding:EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -389,22 +389,22 @@ class JobDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Earnings breakdown',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   _BreakdownRow(
                     label: 'Base pay',
                     value: 'Base: \$${basePay.toStringAsFixed(2)}',
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   _BreakdownRow(
                     label: 'Peak hour bonus',
                     value: 'Bonus: \$${bonus.toStringAsFixed(2)}',
-                    valueColor: const Color(0xFF2E7D32),
+                    valueColor: Color(0xFF2E7D32),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Divider(height: 1),
                   ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
+import 'package:swiftcel/core/constants/app_fonts.dart';
 
 class RiderSettingsScreen extends StatelessWidget {
-  const RiderSettingsScreen({super.key});
+  const RiderSettingsScreen({super.key, this.documentsVerified = true});
+
+  final bool documentsVerified;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,6 @@ class RiderSettingsScreen extends StatelessWidget {
     const joinedYear = 'Joined 2021';
     const vehicleName = 'Niu MQi GT';
     const vehicleType = 'E-Scooter';
-    const documentsVerified = true;
     const payoutMethod = 'Direct Deposit';
     const payoutLast4 = '1234';
 
@@ -24,42 +27,19 @@ class RiderSettingsScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.all(16),
           children: [
-            Row(
-              children: [
-                Icon(Icons.local_shipping, color: Color(0xFFD32F2F), size: 20),
-                SizedBox(width: 6),
-                Text(
-                  'SwiftCel',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFD32F2F),
-                  ),
-                ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(Icons.settings_outlined, color: Colors.black87),
-                  onPressed: () {
-                    context.push(
-                      '/rider/edit-profile',
-                    ); // swap in whatever exact path you used
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
+            
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 28, horizontal: 20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundColor: Color(0xFFEEEEEE),
+                    backgroundColor: AppColors.greyBg,
                   ), // TODO: real avatar image
                   SizedBox(height: 14),
                   Text(
@@ -70,14 +50,8 @@ class RiderSettingsScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '$tier • ',
-                        style: TextStyle(color: Colors.black54, fontSize: 13),
-                      ),
-                      Text(
-                        '$rating ',
-                        style: TextStyle(color: Colors.black54, fontSize: 13),
-                      ),
+                      Text('$tier • ', style: AppFonts.labelSmall),
+                      Text('$rating ', style: AppFonts.labelSmall),
                       Icon(Icons.star, size: 14, color: Color(0xFFD4E157)),
                     ],
                   ),
@@ -91,13 +65,13 @@ class RiderSettingsScreen extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Color(0xFFD32F2F),
+                          color: AppColors.orangeSecondary,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
                           proLevel,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.surface,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                           ),
@@ -110,13 +84,13 @@ class RiderSettingsScreen extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Color(0xFFEFEFEF),
+                          color: AppColors.greyBg,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
                           joinedYear,
                           style: TextStyle(
-                            color: Colors.black54,
+                            color: AppColors.onSurface,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                           ),
@@ -129,10 +103,10 @@ class RiderSettingsScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: navigate to edit profile screen
+                        context.push('/rider/edit-profile');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFD32F2F),
+                        backgroundColor: AppColors.orangeSecondary,
                         padding: EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(28),
@@ -153,8 +127,8 @@ class RiderSettingsScreen extends StatelessWidget {
             SizedBox(height: 14),
             _SettingsTile(
               icon: Icons.electric_moped_outlined,
-              iconBg: Color(0xFFFCE4E4),
-              iconColor: Color(0xFFD32F2F),
+              iconBg: AppColors.greyBg,
+              iconColor: AppColors.orangeSecondary,
               title: 'Vehicle Information',
               subtitle: '$vehicleName • $vehicleType',
               onTap: () {
@@ -163,18 +137,18 @@ class RiderSettingsScreen extends StatelessWidget {
             ),
             _SettingsTile(
               icon: Icons.verified_user_outlined,
-              iconBg: Color(0xFFEFF3C0),
-              iconColor: Color(0xFF9E9D24),
+              iconBg: AppColors.greyBg,
+              iconColor: AppColors.success,
               title: 'Document Status',
               subtitle: documentsVerified
                   ? 'All documents verified'
                   : 'Action needed',
               subtitleColor: documentsVerified
-                  ? Color(0xFF2E7D32)
-                  : Color(0xFFD32F2F),
+                  ? AppColors.success
+                  : AppColors.orangePrimary,
               highlighted: true,
               onTap: () {
-                // TODO: navigate to '/rider/document-verification'
+                context.push('/rider/document-verification');
               },
             ),
             _SettingsTile(
@@ -193,17 +167,7 @@ class RiderSettingsScreen extends StatelessWidget {
               iconColor: Colors.black87,
               title: 'Notifications',
               onTap: () {
-                // TODO: navigate to '/notifications'
-              },
-            ),
-            _SettingsTile(
-              icon: Icons.dark_mode_outlined,
-              iconBg: Color(0xFFEEEEEE),
-              iconColor: Colors.black87,
-              title: 'App Theme',
-              trailingText: 'Light',
-              onTap: () {
-                // TODO: theme picker
+                context.push('/notifications');
               },
             ),
             SizedBox(height: 16),
@@ -242,7 +206,7 @@ class _SettingsTile extends StatelessWidget {
   final bool highlighted;
   final VoidCallback onTap;
 
-  _SettingsTile({
+  const _SettingsTile({
     required this.icon,
     required this.iconBg,
     required this.iconColor,
@@ -265,7 +229,10 @@ class _SettingsTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: highlighted
-              ? Border.all(color: Color(0xFFD4E157), width: 1.2)
+              ? Border.all(
+                  color: AppColors.success.withValues(alpha: 0.7),
+                  width: 1.2,
+                )
               : null,
         ),
         child: Row(

@@ -4,9 +4,8 @@ class AppColors {
   AppColors._();
 
   // ─── BACAKGROUND ───────────────────────────────────────────
-  static const Color surface = Color(
-    0xFFF8F9FB,
-  ); //The primary background color for all screens.
+  static const Color surface = Color(0xFFF8F9FB); //The primary background color
+  static const Color white = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(
     0xFFE1E2E8,
   ); //Used for input fields, inactive states, and subtle dividers.

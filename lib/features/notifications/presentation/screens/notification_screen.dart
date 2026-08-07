@@ -78,7 +78,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body:
           'Package #SWC-8812 was delivered. Proof of delivery is now available in your history.',
       time: 'Yesterday, 10:30 AM',
-      thumbnailUrl: 'assets/images/pod_sample.png',
+      thumbnailUrl: 'assets/images/track in real time.png',
       actionLabel: 'POD',
     ),
     NotificationItem(
@@ -95,7 +95,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      //backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

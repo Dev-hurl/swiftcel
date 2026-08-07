@@ -1,7 +1,33 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class SplashScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        context.go('/login');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,16 +36,15 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            //Animate the logo
-            Image.asset('assets/images/blue Logo.png', width: 200, height: 200),
+            Image.asset(
+              'assets/icons/orange transparent logo only.png',
+              width: 200,
+              height: 200,
+            ),
             SizedBox(height: 4),
             Text(
               '...Moving your World Faster',
-              style: TextStyle(
-                color: Colors.black87,
-                //fontSize: AppFonts.body,
-                //fontWeight: AppFonts.regular,
-              ),
+              style: TextStyle(color: Colors.black87),
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,10 @@ import 'package:swiftcel/core/routing/app_router.dart';
 import 'package:swiftcel/core/services/firebase_service.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 import 'firebase_options.dart';
+
+
+final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+final FirebaseAnalyticsObserver analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

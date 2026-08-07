@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
+import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class OnboardingSlide {
@@ -81,27 +82,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Image.asset(
+          'assets/icons/orange transparent logo only.png',
+        ),
+      ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE8ECE0),
-              Color(0xFFD4E157),
+              AppColors.surface,
+              AppColors.orangeContainer,
             ], // TODO: swap for your exact hex
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 24, top: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Image.asset('assets/icons/white Logo.png', height: 52),
-                ),
-              ),
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
@@ -118,24 +117,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           SizedBox(height: 24),
                           Text(
                             slide.title,
-                            style: TextStyle(
-                              fontSize: 28,
+                            style: AppFonts.displaySmall.copyWith(
                               fontWeight: FontWeight.bold,
-                              height: 1.2,
                             ),
                           ),
-                          SizedBox(height: 12),
-                          Text(
-                            slide.subtitle,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black.withValues(alpha: 0.6),
-                              height: 1.4,
-                            ),
-                          ),
-                          SizedBox(height: 32),
+                          SizedBox(height: 8),
+                          Text(slide.subtitle, style: AppFonts.titleSmall),
+                          SizedBox(height: 24),
                           Expanded(
-                            child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(16),
                               child: Image.asset(
                                 slide.imagePath,
                                 fit: BoxFit.cover,
@@ -148,6 +139,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                 ),
               ),
+              SizedBox(height: 16),
               _PageDots(count: _slides.length, currentIndex: _currentPage),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   final String email; // TODO: pass real email from signup flow
@@ -62,53 +63,31 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment.bottomRight,
-            radius: 1.2,
-            colors: [Color(0xFFFCE4E4), Color(0xFFF7F7F7), Color(0xFFEFF3C0)],
-          ),
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+        decoration: BoxDecoration(
+         
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 20,
+              offset: Offset(0, 8),
+            ),
+          ],
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.local_shipping,
-                            color: Color(0xFFD32F2F),
-                            size: 22,
-                          ),
-                          SizedBox(width: 6),
-                          Text(
-                            'SwiftCel',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFD32F2F),
-                            ),
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.black54),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 80),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 28, horizontal: 24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -117,12 +96,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                           height: 64,
                           width: 64,
                           decoration: BoxDecoration(
-                            color: Color(0xFFD32F2F),
+                            color: AppColors.orangeSecondary,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.mark_email_read,
-                            color: Colors.white,
+                            color: AppColors.surface,
                             size: 28,
                           ),
                         ),
@@ -156,7 +135,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     width: double.infinity,
                     padding: EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -180,7 +159,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                                 decoration: InputDecoration(
                                   counterText: '',
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F5),
+                                  fillColor: AppColors.greyBg,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide.none,

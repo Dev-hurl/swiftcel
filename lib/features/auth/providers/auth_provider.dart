@@ -10,14 +10,18 @@ class AuthProvider extends ChangeNotifier {
     _init();
   }
 
-  bool _isLoading = true;
+  bool _isInitializing = true;
+  bool _isSubmitting = false;
   bool _isLoggedIn = false;
+  bool _isEmailVerified = false;
   bool _hasSeenOnboarding = false;
-  String? _userRole; // 'sender' | 'rider'
+  String? _userRole;
   String? _errorMessage;
 
-  bool get isLoading => _isLoading;
+  bool get isLoading => _isInitializing;
+  bool get isSubmitting => _isSubmitting;
   bool get isLoggedIn => _isLoggedIn;
+  bool get isEmailVerified => _isEmailVerified;
   bool get hasSeenOnboarding => _hasSeenOnboarding;
   String? get userRole => _userRole;
   String? get errorMessage => _errorMessage;
@@ -28,13 +32,16 @@ class AuthProvider extends ChangeNotifier {
 
     _firebaseService.authStateChanges.listen((user) async {
       if (user != null) {
+        await user.reload(); // ensures emailVerified reflects the latest state, not a stale cached value
         _isLoggedIn = true;
+        _isEmailVerified = user.emailVerified;
         _userRole = await _firebaseService.getUserRole(user.uid);
       } else {
         _isLoggedIn = false;
+        _isEmailVerified = false;
         _userRole = null;
       }
-      _isLoading = false;
+      _isInitializing = false;
       notifyListeners();
     });
   }
@@ -56,9 +63,13 @@ class AuthProvider extends ChangeNotifier {
         return 'Password should be at least 6 characters.';
       case 'invalid-email':
         return 'Enter a valid email address.';
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'wrong-password':
+      case 'invalid-credential':
+        return 'Incorrect email or password.';
       default:
-        return exception.message ??
-            'Unable to create account. Please try again.';
+        return exception.message ?? 'Something went wrong. Please try again.';
     }
   }
 
@@ -69,15 +80,12 @@ class AuthProvider extends ChangeNotifier {
     required String password,
     required String role,
   }) async {
-    _isLoading = true;
+    _isSubmitting = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final cred = await _firebaseService.signUp(
-        email: email,
-        password: password,
-      );
+      final cred = await _firebaseService.signUp(email: email, password: password);
       await _firebaseService.createUserDoc(
         uid: cred.user!.uid,
         name: name,
@@ -86,8 +94,8 @@ class AuthProvider extends ChangeNotifier {
         role: role,
       );
       await _firebaseService.sendEmailVerification();
-      
       return true;
+      // Don't set _isLoggedIn/_userRole here — authStateChanges listener handles it
     } on FirebaseAuthException catch (e) {
       _errorMessage = _mapFirebaseError(e);
       return false;
@@ -95,32 +103,35 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = 'Unable to create account. Please try again.';
       return false;
     } finally {
-      _isLoading = false;
+      _isSubmitting = false;
       notifyListeners();
     }
   }
 
   Future<bool> login({required String email, required String password}) async {
-  _isLoading = true;
-  _errorMessage = null;
-  notifyListeners();
-
-  try {
-    await _firebaseService.signIn(email: email, password: password);
-    // Don't set _isLoggedIn/_userRole here — the authStateChanges listener will handle it
-    return true;
-  } catch (e) {
-    _errorMessage = e.toString();
-    return false;
-  } finally {
-    _isLoading = false;
+    _isSubmitting = true;
+    _errorMessage = null;
     notifyListeners();
+
+    try {
+      await _firebaseService.signIn(email: email, password: password);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = _mapFirebaseError(e);
+      return false;
+    } catch (e) {
+      _errorMessage = 'Unable to log in. Please try again.';
+      return false;
+    } finally {
+      _isSubmitting = false;
+      notifyListeners();
+    }
   }
-}
 
   Future<void> logout() async {
     await _firebaseService.signOut();
     _isLoggedIn = false;
+    _isEmailVerified = false;
     _userRole = null;
     notifyListeners();
   }

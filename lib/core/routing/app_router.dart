@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
+import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/presentation/screens/forgot_password.dart';
 import 'package:swiftcel/features/auth/presentation/screens/login_screen.dart';
 import 'package:swiftcel/features/auth/presentation/screens/onboarding_screen.dart';
@@ -28,13 +30,15 @@ import 'package:swiftcel/features/sender/presentation/screens/sender_edit_profil
 import 'package:swiftcel/features/sender/presentation/screens/sender_home.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_settings_screen.dart';
 import 'package:swiftcel/features/support/presentation/screens/support_screen.dart';
+import 'package:swiftcel/main.dart';
 
 class AppRouter {
-  static const bool debugMode = true;
+  static const bool debugMode = false;
   static const String debugInitialLocation = '/sender/edit-profile';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
+      observers: [analyticsObserver],
       initialLocation: debugMode ? debugInitialLocation : '/onboarding',
       refreshListenable: authProvider,
       redirect: (context, state) {
@@ -157,6 +161,15 @@ class AppRouter {
             ),
             StatefulShellBranch(
               routes: [
+                // NEW
+                GoRoute(
+                  path: '/rider/earnings',
+                  builder: (_, _) => EarningScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
                 GoRoute(
                   path: '/rider/history',
                   builder: (_, _) => DeliveryHistory(),
@@ -191,7 +204,6 @@ class AppRouter {
           builder: (_, state) =>
               ProofOfDelivery(deliveryId: state.pathParameters['deliveryId']!),
         ),*/
-        GoRoute(path: '/rider/earnings', builder: (_, _) => EarningScreen()),
         GoRoute(path: '/rider/withdraw', builder: (_, _) => WithdrawScreen()),
         GoRoute(
           path: '/rider/document-verification',
@@ -204,47 +216,51 @@ class AppRouter {
       ],
     );
   }
+}
 
-  static String? _redirect(
-    BuildContext context,
-    GoRouterState state,
-    AuthProvider auth,
-  ) {
-    final loc = state.matchedLocation;
-    final authRoutes = [
-      '/splash',
-      '/onboarding',
-      '/login',
-      '/signup',
-      '/forgot-password',
-    ];
+String? _redirect(
+  BuildContext context,
+  GoRouterState state,
+  AuthProvider auth,
+) {
+  final loc = state.matchedLocation;
+  final authRoutes = [
+    '/splash',
+    '/onboarding',
+    '/login',
+    '/signup',
+    '/forgot-password',
+  ];
 
-    if (auth.isLoading) {
-      return null; // still resolving SharedPreferences / Firebase Auth
-    }
-
-    if (!auth.hasSeenOnboarding && loc != '/onboarding') return '/onboarding';
-    if (auth.hasSeenOnboarding &&
-        !auth.isLoggedIn &&
-        !authRoutes.contains(loc)) {
-      return '/login';
-    }
-    if (auth.isLoggedIn && authRoutes.contains(loc)) {
-      return auth.userRole == 'rider' ? '/rider/home' : '/sender/home';
-    }
-
-    // role guard — block cross-role access
-    if (auth.isLoggedIn) {
-      if (auth.userRole == 'sender' && loc.startsWith('/rider')) {
-        return '/sender/home';
-      }
-      if (auth.userRole == 'rider' && loc.startsWith('/sender')) {
-        return '/rider/home';
-      }
-    }
-
-    return null;
+  if (auth.isLoading) {
+    return loc == '/splash' ? null : '/splash';
   }
+
+  if (!auth.hasSeenOnboarding && loc != '/onboarding') return '/onboarding';
+  if (auth.hasSeenOnboarding && !auth.isLoggedIn && !authRoutes.contains(loc)) {
+    return '/login';
+  }
+
+  // NEW — logged in but not verified: force them to verify-email
+  if (auth.isLoggedIn && !auth.isEmailVerified && loc != '/verify-email') {
+    return '/verify-email';
+  }
+  // Verified and sitting on an auth screen — send home
+  if (auth.isLoggedIn && auth.isEmailVerified && authRoutes.contains(loc)) {
+    return auth.userRole == 'rider' ? '/rider/home' : '/sender/home';
+  }
+
+  // role guard — block cross-role access
+  if (auth.isLoggedIn) {
+    if (auth.userRole == 'sender' && loc.startsWith('/rider')) {
+      return '/sender/home';
+    }
+    if (auth.userRole == 'rider' && loc.startsWith('/sender')) {
+      return '/rider/home';
+    }
+  }
+
+  return null;
 }
 
 // SenderShell — bottom nav wrapper
@@ -262,7 +278,7 @@ class SenderShell extends StatelessWidget {
           i,
           initialLocation: i == navigationShell.currentIndex,
         ),
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Home',
@@ -291,23 +307,81 @@ class RiderShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: _RiderNavBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (i) => navigationShell.goBranch(
           i,
           initialLocation: i == navigationShell.currentIndex,
         ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_shipping_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
-        ],
+      ),
+    );
+  }
+}
+
+class _RiderNavBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const _RiderNavBar({required this.currentIndex, required this.onTap});
+
+  static const _items = [
+    (icon: Icons.home_outlined, label: 'Home'),
+    (icon: Icons.payments_outlined, label: 'Earnings'),
+    (icon: Icons.history, label: 'History'),
+    (icon: Icons.settings_outlined, label: 'Settings'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(_items.length, (index) {
+            final item = _items[index];
+            final isSelected = index == currentIndex;
+            return GestureDetector(
+              onTap: () => onTap(index),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.orangePrimary
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      item.icon,
+                      size: 20,
+                      color: isSelected
+                          ? AppColors.surface
+                          : AppColors.onSurfaceVariant,
+                    ),
+                    if (isSelected) ...[
+                      SizedBox(width: 6),
+                      Text(
+                        item.label,
+                        style: AppFonts.labelMedium.copyWith(
+                          color: AppColors.surface,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

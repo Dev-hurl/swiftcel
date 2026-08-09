@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swiftcel/core/constants/app_fonts.dart';
 
 enum NotifFilter { all, updates, alerts, promos }
 
@@ -95,26 +96,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color(0xFFFAFAFA),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Notifications', style: AppFonts.headlineMedium),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const Text(
-                    'Notifications',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(

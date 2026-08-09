@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
 import 'package:swiftcel/core/constants/app_fonts.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart'; // TODO: restore once Maps billing resolves
@@ -108,61 +109,22 @@ class _RiderHomeState extends State<RiderHome> {
           height: 60,
         ),
         actions: [
-          Text(
-            _isOnline ? 'ONLINE' : 'OFFLINE',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: _isOnline ? Colors.black87 : Colors.black45,
-            ),
-          ),
-          Switch(
-            value: _isOnline,
-            activeThumbColor: AppColors.orangeSecondary,
-            onChanged: (v) => setState(() => _isOnline = v),
+          IconButton(
+            onPressed: () {
+              context.push('/notifications');
+            },
+            icon: Icon(Icons.notifications),
           ),
         ],
       ),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            color: Colors.white,
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _ToggleSegment(
-                      label: 'Map',
-                      icon: Icons.map_outlined,
-                      isSelected: _viewMode == RiderViewMode.map,
-                      onTap: () =>
-                          setState(() => _viewMode = RiderViewMode.map),
-                    ),
-                    _ToggleSegment(
-                      label: 'List',
-                      icon: Icons.list,
-                      isSelected: _viewMode == RiderViewMode.list,
-                      onTap: () =>
-                          setState(() => _viewMode = RiderViewMode.list),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
           Expanded(
             child: Stack(
               children: [
                 if (_viewMode == RiderViewMode.map)
                   Container(
-                    color: Color(0xFFDCEEFB),
+                    color: AppColors.surface,
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -170,13 +132,13 @@ class _RiderHomeState extends State<RiderHome> {
                           Icon(
                             Icons.map_outlined,
                             size: 64,
-                            color: Colors.blue.shade200,
+                            color: AppColors.orangePrimary,
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Text(
                             'Map view — pending Maps API activation',
                             style: TextStyle(
-                              color: Colors.blue.shade300,
+                              color: AppColors.onSurfaceVariant,
                               fontSize: 12,
                             ),
                           ),
@@ -190,6 +152,48 @@ class _RiderHomeState extends State<RiderHome> {
                     onAccept: _acceptJob,
                     onDecline: _declineJob,
                   ),
+
+                // Toggle now floats over whichever content is above, pinned near the top
+                Positioned(
+                  top: 16,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.onSurface.withValues(alpha: 0.05),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _ToggleSegment(
+                            label: 'Map',
+                            icon: Icons.map_outlined,
+                            isSelected: _viewMode == RiderViewMode.map,
+                            onTap: () =>
+                                setState(() => _viewMode = RiderViewMode.map),
+                          ),
+                          _ToggleSegment(
+                            label: 'List',
+                            icon: Icons.list,
+                            isSelected: _viewMode == RiderViewMode.list,
+                            onTap: () =>
+                                setState(() => _viewMode = RiderViewMode.list),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
                 if (_viewMode == RiderViewMode.map && _activeOffer != null)
                   Positioned(
@@ -230,10 +234,20 @@ class _ToggleSegment extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        width: 100,
+        height: 36,
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.surface : AppColors.greyBg,
+          color: isSelected ? AppColors.surface : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? AppColors.onSurface.withValues(alpha: 0.05)
+                  : Colors.transparent,
+              blurRadius: 20,
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -462,7 +476,7 @@ class _JobListView extends StatelessWidget {
     return Container(
       color: AppColors.surface,
       child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 100),
+        padding: const EdgeInsets.fromLTRB(16, 70, 16, 16),
         itemCount: offers.length,
         itemBuilder: (context, index) {
           final offer = offers[index];
@@ -470,11 +484,11 @@ class _JobListView extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 12),
             padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.greyBg,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.onSurface.withValues(alpha: 0.04),
+                  color: AppColors.onSurface.withValues(alpha: 0.07),
                   blurRadius: 6,
                 ),
               ],
@@ -485,7 +499,7 @@ class _JobListView extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.orangeContainer,
+                    color: AppColors.greyBg,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
 import 'package:swiftcel/core/constants/app_fonts.dart';
+import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class RiderSettingsScreen extends StatelessWidget {
   const RiderSettingsScreen({super.key, this.documentsVerified = true});
@@ -22,12 +24,11 @@ class RiderSettingsScreen extends StatelessWidget {
     const payoutLast4 = '1234';
 
     return Scaffold(
-      backgroundColor: Color(0xFFFAFAFA),
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.all(16),
           children: [
-            
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 28, horizontal: 20),
@@ -40,19 +41,17 @@ class RiderSettingsScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: AppColors.greyBg,
-                  ), // TODO: real avatar image
-                  SizedBox(height: 14),
-                  Text(
-                    name,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    child: Icon(Icons.person_2_rounded),
                   ),
+                  SizedBox(height: 14),
+                  Text(name, style: AppFonts.headlineMedium),
                   SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('$tier • ', style: AppFonts.labelSmall),
                       Text('$rating ', style: AppFonts.labelSmall),
-                      Icon(Icons.star, size: 14, color: Color(0xFFD4E157)),
+                      Icon(Icons.star, size: 14, color: AppColors.warning),
                     ],
                   ),
                   SizedBox(height: 12),
@@ -70,10 +69,8 @@ class RiderSettingsScreen extends StatelessWidget {
                         ),
                         child: Text(
                           proLevel,
-                          style: TextStyle(
+                          style: AppFonts.labelSmall.copyWith(
                             color: AppColors.surface,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -89,10 +86,8 @@ class RiderSettingsScreen extends StatelessWidget {
                         ),
                         child: Text(
                           joinedYear,
-                          style: TextStyle(
+                          style: AppFonts.labelSmall.copyWith(
                             color: AppColors.onSurface,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -106,7 +101,7 @@ class RiderSettingsScreen extends StatelessWidget {
                         context.push('/rider/edit-profile');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.orangeSecondary,
+                        backgroundColor: AppColors.orangePrimary,
                         padding: EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(28),
@@ -114,9 +109,9 @@ class RiderSettingsScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'Edit Profile',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                        style: AppFonts.bodyMedium.copyWith(
+                          color: AppColors.surface,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -127,7 +122,7 @@ class RiderSettingsScreen extends StatelessWidget {
             SizedBox(height: 14),
             _SettingsTile(
               icon: Icons.electric_moped_outlined,
-              iconBg: AppColors.greyBg,
+              iconBg: AppColors.surface,
               iconColor: AppColors.orangeSecondary,
               title: 'Vehicle Information',
               subtitle: '$vehicleName • $vehicleType',
@@ -137,7 +132,7 @@ class RiderSettingsScreen extends StatelessWidget {
             ),
             _SettingsTile(
               icon: Icons.verified_user_outlined,
-              iconBg: AppColors.greyBg,
+              iconBg: AppColors.surface,
               iconColor: AppColors.success,
               title: 'Document Status',
               subtitle: documentsVerified
@@ -153,8 +148,8 @@ class RiderSettingsScreen extends StatelessWidget {
             ),
             _SettingsTile(
               icon: Icons.account_balance_outlined,
-              iconBg: Color(0xFFEEEEEE),
-              iconColor: Colors.black87,
+              iconBg: AppColors.surface,
+              iconColor: AppColors.onSurface,
               title: 'Payout Settings',
               subtitle: '$payoutMethod • ••••$payoutLast4',
               onTap: () {
@@ -163,29 +158,32 @@ class RiderSettingsScreen extends StatelessWidget {
             ),
             _SettingsTile(
               icon: Icons.notifications_none,
-              iconBg: Color(0xFFEEEEEE),
-              iconColor: Colors.black87,
+              iconBg: AppColors.surface,
+              iconColor: AppColors.onSurface,
               title: 'Notifications',
               onTap: () {
                 context.push('/notifications');
               },
             ),
-            SizedBox(height: 16),
-            _PlainRow(
-              icon: Icons.help_outline,
-              label: 'Help Center',
-              trailingIcon: Icons.arrow_forward,
+            _SettingsTile(
+              icon: Icons.help_outline_rounded,
+              iconBg: AppColors.surface,
+              iconColor: AppColors.onSurface,
+              title: 'Help Center',
               onTap: () {
-                // TODO: navigate to '/support'
+                context.push('/support');
               },
             ),
-            SizedBox(height: 10),
-            _PlainRow(
-              icon: Icons.logout,
-              label: 'Log Out',
-              color: Color(0xFFD32F2F),
-              onTap: () {
-                // TODO: call AuthProvider.logout()
+            _SettingsTile(
+              icon: Icons.logout_rounded,
+              iconBg: AppColors.surface,
+              iconColor: AppColors.error,
+              title: 'Log Out',
+              onTap: () async {
+                await context.read<AuthProvider>().logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
               },
             ),
           ],
@@ -202,7 +200,6 @@ class _SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Color? subtitleColor;
-  final String? trailingText;
   final bool highlighted;
   final VoidCallback onTap;
 
@@ -213,7 +210,6 @@ class _SettingsTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.subtitleColor,
-    this.trailingText,
     this.highlighted = false,
     required this.onTap,
   });
@@ -234,6 +230,12 @@ class _SettingsTile extends StatelessWidget {
                   width: 1.2,
                 )
               : null,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.onSurface.withValues(alpha: 0.07),
+              blurRadius: 6,
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -253,69 +255,28 @@ class _SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                    style: AppFonts.bodyMedium.copyWith(
+                      color: AppColors.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   if (subtitle != null)
                     Text(
                       subtitle!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: subtitleColor ?? Colors.black54,
+                      style: AppFonts.labelSmall.copyWith(
+                        color: subtitleColor ?? AppColors.onSurfaceVariant,
                       ),
                     ),
                 ],
               ),
             ),
-            if (trailingText != null)
-              Text(
-                trailingText!,
-                style: TextStyle(fontSize: 12, color: Colors.black45),
-              ),
-            SizedBox(width: 4),
-            Icon(Icons.chevron_right, size: 18, color: Colors.black38),
+            Icon(
+              Icons.chevron_right,
+              size: 18,
+              color: AppColors.onSurfaceVariant,
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PlainRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final IconData? trailingIcon;
-  final Color? color;
-  final VoidCallback onTap;
-
-  _PlainRow({
-    required this.icon,
-    required this.label,
-    this.trailingIcon,
-    this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: color ?? Colors.black87),
-          SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: color ?? Colors.black87,
-              ),
-            ),
-          ),
-          if (trailingIcon != null)
-            Icon(trailingIcon, size: 18, color: color ?? Colors.black54),
-        ],
       ),
     );
   }

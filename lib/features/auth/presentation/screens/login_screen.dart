@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _login() async {
     final authProvider = context.read<AuthProvider>();
+    if (authProvider.isSubmitting) return;
 
     final success = await authProvider.login(
       email: _identifierController.text.trim(),
@@ -35,11 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
     }
-    // No navigation call needed here — see below for why
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+
     return Scaffold(
       //backgroundColor: Colors.white,
       body: Column(
@@ -196,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _login,
+                        onPressed: authProvider.isSubmitting ? null : _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.orangePrimary,
                           padding: EdgeInsets.symmetric(vertical: 16),
@@ -204,13 +206,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: authProvider.isSubmitting
+                            ? SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                'Log In',
+                                style: AppFonts.labelLarge.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                     SizedBox(height: 20),

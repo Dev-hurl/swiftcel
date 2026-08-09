@@ -53,8 +53,17 @@ class AppRouter {
         GoRoute(path: '/signup', builder: (_, _) => SignupScreen()),
         GoRoute(
           path: '/verify-email',
-          builder: (_, state) =>
-              VerifyEmailScreen(email: state.extra as String? ?? ''),
+          builder: (_, state) {
+            final email = state.extra as String? ?? '';
+            final oobCode = state.uri.queryParameters['oobCode'];
+            final mode = state.uri.queryParameters['mode'];
+
+            return VerifyEmailScreen(
+              email: email,
+              oobCode: oobCode,
+              mode: mode,
+            );
+          },
         ),
         GoRoute(
           path: '/forgot-password',

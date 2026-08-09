@@ -37,12 +37,13 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future<void> _createAccount() async {
+    final authProvider = context.read<AuthProvider>();
+    if (authProvider.isSubmitting) return;
+
     final formValid = _formKey.currentState!.validate();
     setState(() => _showTermsError = !_agreedToTerms);
-
     if (!formValid || !_agreedToTerms) return;
 
-    final authProvider = context.read<AuthProvider>();
     final email = _emailController.text.trim();
     final success = await authProvider.signup(
       name: _nameController.text.trim(),
@@ -67,6 +68,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -241,7 +244,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 width: 24,
                                 child: Checkbox(
                                   value: _agreedToTerms,
-                                  activeColor: AppColors.orangeSecondary,
+                                  activeColor: AppColors.orangePrimary,
                                   onChanged: (v) => setState(() {
                                     _agreedToTerms = v ?? false;
                                     if (_agreedToTerms) _showTermsError = false;
@@ -307,7 +310,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: _createAccount,
+                              onPressed: authProvider.isSubmitting
+                                  ? null
+                                  : _createAccount,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.orangePrimary,
                                 padding: EdgeInsets.symmetric(vertical: 16),
@@ -315,40 +320,48 @@ class _SignupScreenState extends State<SignupScreen> {
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Create Account',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                              child: authProvider.isSubmitting
+                                  ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Create Account',
+                                          style: AppFonts.labelLarge.copyWith(
+                                            color: AppColors.white,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          color: AppColors.white,
+                                          size: 16,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Icon(
-                                    Icons.arrow_forward,
-                                    color: AppColors.surface,
-                                    size: 16,
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                           SizedBox(height: 16),
                           Center(
                             child: RichText(
                               text: TextSpan(
-                                style: AppFonts.labelSmall.copyWith(
+                                style: AppFonts.labelMedium.copyWith(
                                   color: AppColors.onSurfaceVariant,
                                 ),
                                 children: [
                                   TextSpan(text: 'Already have an account? '),
                                   TextSpan(
                                     text: 'Log In',
-                                    style: TextStyle(
+                                    style: AppFonts.labelMedium.copyWith(
                                       color: AppColors.orangePrimary,
-                                      fontWeight: FontWeight.w600,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () => context.push('/login'),
@@ -415,8 +428,8 @@ class _RoleToggleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        duration: Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.orangePrimary : Colors.transparent,
           borderRadius: BorderRadius.circular(26),

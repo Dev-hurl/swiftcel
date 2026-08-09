@@ -4,6 +4,7 @@ class AppColors {
   AppColors._();
 
   // ─── BACAKGROUND ───────────────────────────────────────────
+  static const Color scaffoldBg = Color(0xFFFAFAFA);
   static const Color surface = Color(0xFFF8F9FB); //The primary background color
   static const Color white = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(

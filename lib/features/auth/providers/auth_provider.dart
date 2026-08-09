@@ -32,10 +32,20 @@ class AuthProvider extends ChangeNotifier {
 
     _firebaseService.authStateChanges.listen((user) async {
       if (user != null) {
-        await user.reload(); // ensures emailVerified reflects the latest state, not a stale cached value
-        _isLoggedIn = true;
-        _isEmailVerified = user.emailVerified;
-        _userRole = await _firebaseService.getUserRole(user.uid);
+        try {
+          await user
+              .reload(); // ensures emailVerified reflects the latest state, not a stale cached value
+          _isLoggedIn = true;
+          _isEmailVerified = user.emailVerified;
+          _userRole = await _firebaseService.getUserRole(user.uid);
+        } on FirebaseAuthException {
+          // User was deleted or session is invalid — treat as logged out
+          await _firebaseService
+              .signOut(); // clears the stale local session too
+          _isLoggedIn = false;
+          _isEmailVerified = false;
+          _userRole = null;
+        }
       } else {
         _isLoggedIn = false;
         _isEmailVerified = false;
@@ -85,7 +95,10 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final cred = await _firebaseService.signUp(email: email, password: password);
+      final cred = await _firebaseService.signUp(
+        email: email,
+        password: password,
+      );
       await _firebaseService.createUserDoc(
         uid: cred.user!.uid,
         name: name,

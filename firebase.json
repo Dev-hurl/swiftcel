@@ -1,1 +1,31 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"swiftcel0","appId":"1:335824276054:android:e5b4525633a6fe4e93c9f7","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"swiftcel0","configurations":{"android":"1:335824276054:android:e5b4525633a6fe4e93c9f7","ios":"1:335824276054:ios:564a1eef52cf972a93c9f7","web":"1:335824276054:web:3414e78cd49b4f4993c9f7"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "swiftcel0",
+          "appId": "1:335824276054:android:e5b4525633a6fe4e93c9f7",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "swiftcel0",
+          "configurations": {
+            "android": "1:335824276054:android:e5b4525633a6fe4e93c9f7",
+            "ios": "1:335824276054:ios:564a1eef52cf972a93c9f7",
+            "web": "1:335824276054:web:3414e78cd49b4f4993c9f7"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

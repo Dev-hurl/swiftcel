@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.swiftcel",
+      "sha256_cert_fingerprints": [
+        "4F:AF:D6:FF:83:84:5F:8B:16:65:56:F9:67:49:95:F3:4F:B0:A0:E5:AF:80:B2:65:4B:D9:10:04:C5:8C:1D:64"
+      ]
+    }
+  }
+]

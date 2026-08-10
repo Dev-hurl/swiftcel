@@ -72,7 +72,7 @@ class AppTheme {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surfaceVariant,
+      fillColor: AppColors.greyBg,
       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       hintStyle: AppFonts.bodyMedium.copyWith(
         color: AppColors.onSurfaceVariant,

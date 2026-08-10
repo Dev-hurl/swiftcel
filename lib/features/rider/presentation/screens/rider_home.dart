@@ -297,7 +297,7 @@ class _JobOfferCard extends StatelessWidget {
                       height: 6,
                       width: 6,
                       decoration: BoxDecoration(
-                        color: AppColors.orangeSecondary,
+                        color: AppColors.orangePrimary,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -421,7 +421,7 @@ class _JobOfferCard extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.orangeSecondary,
+                      backgroundColor: AppColors.orangePrimary,
                       padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),

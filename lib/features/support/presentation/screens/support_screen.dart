@@ -39,7 +39,7 @@ class SupportScreen extends StatelessWidget {
               prefixIcon: Icon(Icons.search, color: AppColors.orangePrimary),
               suffixIcon: Icon(Icons.qr_code_scanner, size: 20),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: AppColors.greyBg,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
                 borderSide: BorderSide.none,
@@ -49,11 +49,7 @@ class SupportScreen extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             'CATEGORIES',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Colors.black45,
-            ),
+            style: AppFonts.labelSmall
           ),
           SizedBox(height: 10),
           _CategoryCard(

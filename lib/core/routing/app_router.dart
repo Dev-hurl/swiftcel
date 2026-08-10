@@ -12,10 +12,13 @@ import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 import 'package:swiftcel/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:swiftcel/features/chat/presentation/screens/chat_screen.dart';
 import 'package:swiftcel/features/notifications/presentation/screens/notification_screen.dart';
+import 'package:swiftcel/features/rider/presentation/screens/active_delivery_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/delivery_history.dart';
 import 'package:swiftcel/features/rider/presentation/screens/document_verification.dart';
 import 'package:swiftcel/features/rider/presentation/screens/earning_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/job_details_screen.dart';
+import 'package:swiftcel/features/rider/presentation/screens/multi_job_details_screen.dart';
+import 'package:swiftcel/features/rider/presentation/screens/proof_of_delivery.dart';
 import 'package:swiftcel/features/rider/presentation/screens/rider_edit_profile.dart';
 import 'package:swiftcel/features/rider/presentation/screens/rider_home.dart';
 import 'package:swiftcel/features/rider/presentation/screens/rider_settings_screen.dart';
@@ -34,7 +37,7 @@ import 'package:swiftcel/main.dart';
 
 class AppRouter {
   static const bool debugMode = false;
-  static const String debugInitialLocation = '/sender/edit-profile';
+  static const String debugInitialLocation = '/rider/active-delivery/test123';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
@@ -202,7 +205,12 @@ class AppRouter {
           builder: (_, state) =>
               JobDetailsScreen(deliveryId: state.pathParameters['deliveryId']!),
         ),
-        /*GoRoute(
+        GoRoute(
+          path: '/rider/multi-stop-job/:jobId',
+          builder: (_, state) =>
+              MultiStopJobDetailsScreen(jobId: state.pathParameters['jobId']!),
+        ),
+        GoRoute(
           path: '/rider/active-delivery/:deliveryId',
           builder: (_, state) => ActiveDeliveryScreen(
             deliveryId: state.pathParameters['deliveryId']!,
@@ -210,9 +218,10 @@ class AppRouter {
         ),
         GoRoute(
           path: '/rider/proof-of-delivery/:deliveryId',
-          builder: (_, state) =>
-              ProofOfDelivery(deliveryId: state.pathParameters['deliveryId']!),
-        ),*/
+          builder: (_, state) => ProofOfDeliveryScreen(
+            deliveryId: state.pathParameters['deliveryId']!,
+          ),
+        ),
         GoRoute(path: '/rider/withdraw', builder: (_, _) => WithdrawScreen()),
         GoRoute(
           path: '/rider/document-verification',
@@ -272,7 +281,7 @@ String? _redirect(
   return null;
 }
 
-// SenderShell — bottom nav wrapper
+// SenderShell — same pattern, 3 tabs
 class SenderShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
   const SenderShell({super.key, required this.navigationShell});
@@ -281,27 +290,81 @@ class SenderShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: _SenderNavBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (i) => navigationShell.goBranch(
           i,
           initialLocation: i == navigationShell.currentIndex,
         ),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
-        ],
+      ),
+    );
+  }
+}
+
+class _SenderNavBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const _SenderNavBar({required this.currentIndex, required this.onTap});
+
+  static const _items = [
+    (icon: Icons.home_outlined, label: 'Home'),
+    (icon: Icons.history, label: 'History'),
+    (icon: Icons.chat, label: 'Chat'),
+    (icon: Icons.person_outline, label: 'Profile'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(_items.length, (index) {
+            final item = _items[index];
+            final isSelected = index == currentIndex;
+            return GestureDetector(
+              onTap: () => onTap(index),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.orangePrimary
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      item.icon,
+                      size: 20,
+                      color: isSelected
+                          ? AppColors.surface
+                          : AppColors.onSurfaceVariant,
+                    ),
+                    if (isSelected) ...[
+                      SizedBox(width: 6),
+                      Text(
+                        item.label,
+                        style: AppFonts.labelMedium.copyWith(
+                          color: AppColors.surface,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

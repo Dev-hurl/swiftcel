@@ -24,7 +24,6 @@ class RiderSettingsScreen extends StatelessWidget {
     const payoutLast4 = '1234';
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.all(16),
@@ -232,7 +231,7 @@ class _SettingsTile extends StatelessWidget {
               : null,
           boxShadow: [
             BoxShadow(
-              color: AppColors.onSurface.withValues(alpha: 0.07),
+              color: AppColors.onSurface.withValues(alpha: 0.05),
               blurRadius: 6,
             ),
           ],

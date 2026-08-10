@@ -34,11 +34,10 @@ class RiderHome extends StatefulWidget {
 
 class _RiderHomeState extends State<RiderHome> {
   RiderViewMode _viewMode = RiderViewMode.map;
-  bool _isOnline = true;
   int _secondsLeft = 45;
   Timer? _timer;
 
-  final JobOffer? _activeOffer = JobOffer(
+  final JobOffer _activeOffer = JobOffer(
     id: 'SWC-90210',
     category: 'Small Box',
     subCategory: 'Electronics & Gadgets',
@@ -91,14 +90,6 @@ class _RiderHomeState extends State<RiderHome> {
     super.dispose();
   }
 
-  void _acceptJob(String offerId) {
-    // TODO: call JobOfferProvider.acceptJob(offerId), then push to '/rider/job/:deliveryId'
-  }
-
-  void _declineJob(String offerId) {
-    // TODO: call JobOfferProvider.declineJob(offerId)
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +115,7 @@ class _RiderHomeState extends State<RiderHome> {
               children: [
                 if (_viewMode == RiderViewMode.map)
                   Container(
-                    color: AppColors.surface,
+                    color: AppColors.greyBg,
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +125,7 @@ class _RiderHomeState extends State<RiderHome> {
                             size: 64,
                             color: AppColors.orangePrimary,
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
                           Text(
                             'Map view — pending Maps API activation',
                             style: TextStyle(
@@ -147,11 +138,7 @@ class _RiderHomeState extends State<RiderHome> {
                     ),
                   )
                 else
-                  _JobListView(
-                    offers: _listOffers,
-                    onAccept: _acceptJob,
-                    onDecline: _declineJob,
-                  ),
+                  _JobListView(offers: _listOffers),
 
                 // Toggle now floats over whichever content is above, pinned near the top
                 Positioned(
@@ -160,15 +147,15 @@ class _RiderHomeState extends State<RiderHome> {
                   right: 0,
                   child: Center(
                     child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.onSurface.withValues(alpha: 0.05),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
+                            blurRadius: 16,
+                            offset: Offset(0, 8),
                           ),
                         ],
                       ),
@@ -195,7 +182,7 @@ class _RiderHomeState extends State<RiderHome> {
                   ),
                 ),
 
-                if (_viewMode == RiderViewMode.map && _activeOffer != null)
+                if (_viewMode == RiderViewMode.map)
                   Positioned(
                     left: 0,
                     right: 0,
@@ -203,8 +190,6 @@ class _RiderHomeState extends State<RiderHome> {
                     child: _JobOfferCard(
                       offer: _activeOffer,
                       secondsLeft: _secondsLeft,
-                      onAccept: () => _acceptJob(_activeOffer.id),
-                      onDecline: () => _declineJob(_activeOffer.id),
                     ),
                   ),
               ],
@@ -238,7 +223,7 @@ class _ToggleSegment extends StatelessWidget {
         height: 36,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.surface : Colors.transparent,
+          color: isSelected ? AppColors.orangePrimary : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -254,17 +239,13 @@ class _ToggleSegment extends StatelessWidget {
             Icon(
               icon,
               size: 15,
-              color: isSelected
-                  ? AppColors.orangeSecondary
-                  : AppColors.onSurface,
+              color: isSelected ? AppColors.surface : AppColors.onSurface,
             ),
             SizedBox(width: 5),
             Text(
               label,
               style: AppFonts.titleLarge.copyWith(
-                color: isSelected
-                    ? AppColors.orangeSecondary
-                    : AppColors.onSurface,
+                color: isSelected ? AppColors.surface : AppColors.onSurface,
               ),
             ),
           ],
@@ -277,30 +258,24 @@ class _ToggleSegment extends StatelessWidget {
 class _JobOfferCard extends StatelessWidget {
   final JobOffer offer;
   final int secondsLeft;
-  final VoidCallback onAccept;
-  final VoidCallback onDecline;
 
   const _JobOfferCard({
     required this.offer,
     required this.secondsLeft,
-    required this.onAccept,
-    required this.onDecline,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(
-        16,
-        0,
-        16,
-        100,
-      ), // clears the floating nav bar
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 100),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 12),
+          BoxShadow(
+            color: AppColors.onSurfaceVariant.withValues(alpha: 0.1),
+            blurRadius: 12,
+          ),
         ],
       ),
       child: Column(
@@ -316,17 +291,41 @@ class _JobOfferCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'NEW JOB AVAILABLE',
-                  style: AppFonts.labelSmall.copyWith(
-                    color: AppColors.orangeSecondary,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6,
+                      width: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.orangeSecondary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      'NEW JOB AVAILABLE',
+                      style: AppFonts.labelSmall.copyWith(
+                        color: AppColors.orangeSecondary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '${secondsLeft}s',
-                  style: AppFonts.labelSmall.copyWith(
-                    color: AppColors.orangeSecondary,
-                  ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 12,
+                      color: AppColors.orangeSecondary,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '${secondsLeft}s',
+                      style: AppFonts.labelSmall.copyWith(
+                        color: AppColors.orangeSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -341,12 +340,12 @@ class _JobOfferCard extends StatelessWidget {
                       height: 40,
                       width: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.orangeContainer,
+                        color: AppColors.success.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
                         Icons.inventory_2_outlined,
-                        color: AppColors.orangeSecondary,
+                        color: AppColors.onSurface,
                         size: 18,
                       ),
                     ),
@@ -384,72 +383,51 @@ class _JobOfferCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFAFAFA),
+                    color: AppColors.surfaceVariant,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.location_on_outlined,
-                        size: 14,
-                        color: Color(0xFFD32F2F),
+                        size: 16,
+                        color: AppColors.onSurfaceVariant,
                       ),
                       SizedBox(width: 6),
-                      Text(
-                        'PICKUP',
-                        style: TextStyle(fontSize: 9, color: Colors.black45),
-                      ),
-                      SizedBox(width: 6),
+                      Text('PICKUP', style: AppFonts.labelSmall),
+                      SizedBox(width: 8),
                       Text(
                         '${offer.distanceKm}km away',
-                        style: AppFonts.labelSmall.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppFonts.titleSmall,
                       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: onDecline,
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
-                        child: Text(
-                          'Decline',
-                          style: TextStyle(color: Colors.black87),
-                        ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () =>
+                        context.push('/rider/multi-stop-job/${offer.id}'),
+                    icon: Icon(
+                      Icons.description_outlined,
+                      size: 18,
+                      color: AppColors.white,
+                    ),
+                    label: Text(
+                      'View Job Details',
+                      style: AppFonts.labelLarge.copyWith(
+                        color: AppColors.white,
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      flex: 2,
-                      child: ElevatedButton(
-                        onPressed: onAccept,
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: AppColors.orangePrimary,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
-                        child: Text(
-                          'Accept Job',
-                          style: TextStyle(
-                            color: AppColors.surface,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.orangeSecondary,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -462,13 +440,9 @@ class _JobOfferCard extends StatelessWidget {
 
 class _JobListView extends StatelessWidget {
   final List<JobOffer> offers;
-  final void Function(String) onAccept;
-  final void Function(String) onDecline;
 
   const _JobListView({
     required this.offers,
-    required this.onAccept,
-    required this.onDecline,
   });
 
   @override
@@ -476,68 +450,71 @@ class _JobListView extends StatelessWidget {
     return Container(
       color: AppColors.surface,
       child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(16, 70, 16, 16),
+        padding: EdgeInsets.fromLTRB(16, 70, 16, 16),
         itemCount: offers.length,
         itemBuilder: (context, index) {
           final offer = offers[index];
-          return Container(
-            margin: EdgeInsets.only(bottom: 12),
-            padding: EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.onSurface.withValues(alpha: 0.07),
-                  blurRadius: 6,
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.greyBg,
-                    borderRadius: BorderRadius.circular(10),
+          return GestureDetector(
+            onTap: () => context.push('/rider/multi-stop-job/${offer.id}'),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 12),
+              padding: EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.onSurface.withValues(alpha: 0.05),
+                    blurRadius: 6,
                   ),
-                  child: Icon(
-                    Icons.inventory_2_outlined,
-                    size: 18,
-                    color: AppColors.orangeSecondary,
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.greyBg,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.inventory_2_outlined,
+                      size: 18,
+                      color: AppColors.orangeSecondary,
+                    ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        offer.category,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          offer.category,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${offer.distanceKm}km away · Deliver by ${offer.deliverByTime}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.onSurface,
+                        Text(
+                          '${offer.distanceKm}km away · Deliver by ${offer.deliverByTime}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.onSurface,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  '\$${offer.payout.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    color: Color(0xFFD32F2F),
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    '\$${offer.payout.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      color: Color(0xFFD32F2F),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

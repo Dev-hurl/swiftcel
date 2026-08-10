@@ -10,14 +10,11 @@ class DocumentVerification extends StatefulWidget {
   const DocumentVerification({super.key});
 
   @override
-  State<DocumentVerification> createState() =>
-      _DocumentVerificationState();
+  State<DocumentVerification> createState() => _DocumentVerificationState();
 }
 
-class _DocumentVerificationState
-    extends State<DocumentVerification> {
-  final VerificationStatus _status =
-      VerificationStatus.pendingReview;
+class _DocumentVerificationState extends State<DocumentVerification> {
+  final VerificationStatus _status = VerificationStatus.pendingReview;
   VehicleType _selectedVehicle = VehicleType.sedanHatchback;
   final _licensePlateController = TextEditingController();
 
@@ -47,213 +44,209 @@ class _DocumentVerificationState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surface,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Text('Verification & Vehicle', style: AppFonts.headlineLarge),
-            const SizedBox(height: 10),
-            _StatusChip(status: _status),
-            const SizedBox(height: 20),
+      appBar: AppBar(
+        title: Text('Verification & Vehicle', style: AppFonts.headlineMedium),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          SizedBox(height: 10),
+          _StatusChip(status: _status),
+          SizedBox(height: 20),
 
-            Row(
-              children: [
-                const Icon(
-                  Icons.badge_outlined,
-                  color: AppColors.orangeSecondary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text('Identity Verification', style: AppFonts.titleLarge),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Upload a clear photo of your government-issued ID card (front and back).',
-              style: AppFonts.bodySmall,
-            ),
-            const SizedBox(height: 16),
-            _UploadBox(
-              label: 'Front of ID',
-              filePath: _frontIdPath,
-              onTap: () =>
-                  _pickImage((path) => setState(() => _frontIdPath = path)),
-            ),
-            const SizedBox(height: 12),
-            _UploadBox(
-              label: 'Back of ID',
-              filePath: _backIdPath,
-              onTap: () =>
-                  _pickImage((path) => setState(() => _backIdPath = path)),
-            ),
-            const SizedBox(height: 24),
-
-            Row(
-              children: [
-                const Icon(
-                  Icons.electric_moped_outlined,
-                  color: AppColors.success,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text('Vehicle Info', style: AppFonts.titleLarge),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+          Row(
+            children: [
+              Icon(
+                Icons.badge_outlined,
+                color: AppColors.orangeSecondary,
+                size: 20,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Vehicle Type', style: AppFonts.labelMedium),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
+              SizedBox(width: 8),
+              Text('Identity Verification', style: AppFonts.titleLarge),
+            ],
+          ),
+          SizedBox(height: 12),
+          Text(
+            'Upload a clear photo of your government-issued ID card (front and back).',
+            style: AppFonts.bodySmall,
+          ),
+          SizedBox(height: 16),
+          _UploadBox(
+            label: 'Front of ID',
+            filePath: _frontIdPath,
+            onTap: () =>
+                _pickImage((path) => setState(() => _frontIdPath = path)),
+          ),
+          const SizedBox(height: 12),
+          _UploadBox(
+            label: 'Back of ID',
+            filePath: _backIdPath,
+            onTap: () =>
+                _pickImage((path) => setState(() => _backIdPath = path)),
+          ),
+          SizedBox(height: 24),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.electric_moped_outlined,
+                color: AppColors.success,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text('Vehicle Info', style: AppFonts.titleLarge),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Vehicle Type', style: AppFonts.labelMedium),
+                SizedBox(height: 8),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.greyBg,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<VehicleType>(
+                      value: _selectedVehicle,
+                      isExpanded: true,
+                      style: AppFonts.bodyMedium,
+                      items: [
+                        DropdownMenuItem(
+                          value: VehicleType.sedanHatchback,
+                          child: Text('Sedan / Hatchback'),
+                        ),
+                        DropdownMenuItem(
+                          value: VehicleType.motorcycle,
+                          child: Text('Motorcycle'),
+                        ),
+                        DropdownMenuItem(
+                          value: VehicleType.bicycle,
+                          child: Text('Bicycle'),
+                        ),
+                        DropdownMenuItem(
+                          value: VehicleType.van,
+                          child: Text('Van'),
+                        ),
+                      ],
+                      onChanged: (v) => setState(
+                        () => _selectedVehicle = v ?? _selectedVehicle,
+                      ),
                     ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text('License Plate', style: AppFonts.labelMedium),
+                SizedBox(height: 8),
+                TextField(
+                  controller: _licensePlateController,
+                  style: AppFonts.bodyMedium,
+                  decoration: InputDecoration(
+                    hintText: 'e.g. ABC-1234',
+                    hintStyle: AppFonts.bodyMedium.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                    filled: true,
+                    fillColor: AppColors.greyBg,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text('Insurance Doc', style: AppFonts.labelMedium),
+                SizedBox(height: 8),
+                GestureDetector(
+                  onTap: _pickDocument,
+                  child: Container(
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceVariant,
+                      color: AppColors.greyBg,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<VehicleType>(
-                        value: _selectedVehicle,
-                        isExpanded: true,
-                        style: AppFonts.bodyMedium,
-                        items: const [
-                          DropdownMenuItem(
-                            value: VehicleType.sedanHatchback,
-                            child: Text('Sedan / Hatchback'),
-                          ),
-                          DropdownMenuItem(
-                            value: VehicleType.motorcycle,
-                            child: Text('Motorcycle'),
-                          ),
-                          DropdownMenuItem(
-                            value: VehicleType.bicycle,
-                            child: Text('Bicycle'),
-                          ),
-                          DropdownMenuItem(
-                            value: VehicleType.van,
-                            child: Text('Van'),
-                          ),
-                        ],
-                        onChanged: (v) => setState(
-                          () => _selectedVehicle = v ?? _selectedVehicle,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: AppColors.orangeSecondary,
+                          size: 20,
                         ),
-                      ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _insuranceDocPath == null
+                                    ? 'Click to upload insurance'
+                                    : 'Document selected',
+                                style: AppFonts.bodySmall,
+                              ),
+                              Text(
+                                'PDF/Image, Max size 5MB',
+                                style: AppFonts.labelSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Text('License Plate', style: AppFonts.labelMedium),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _licensePlateController,
-                    style: AppFonts.bodyMedium,
-                    decoration: InputDecoration(
-                      hintText: 'e.g. ABC-1234',
-                      hintStyle: AppFonts.bodyMedium.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                      filled: true,
-                      fillColor: AppColors.surfaceVariant,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Insurance Doc', style: AppFonts.labelMedium),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: _pickDocument,
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceVariant,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.picture_as_pdf_outlined,
-                            color: AppColors.orangeSecondary,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _insuranceDocPath == null
-                                      ? 'Click to upload insurance'
-                                      : 'Document selected',
-                                  style: AppFonts.bodySmall,
-                                ),
-                                Text(
-                                  'PDF/Image, Max size 5MB',
-                                  style: AppFonts.labelSmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _updateDocuments,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.orangePrimary,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.upload_outlined, color: Colors.white, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    'Update Documents',
+                    style: AppFonts.labelLarge.copyWith(color: Colors.white),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _updateDocuments,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.orangeSecondary,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.upload_outlined,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Update Documents',
-                      style: AppFonts.labelLarge.copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Updating documents will trigger a re-verification\nprocess which typically takes 24-48 hours.',
-              textAlign: TextAlign.center,
-              style: AppFonts.labelSmall,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Updating documents will trigger a re-verification\nprocess which typically takes 24-48 hours.',
+            textAlign: TextAlign.center,
+            style: AppFonts.labelSmall,
+          ),
+        ],
       ),
     );
   }
@@ -317,7 +310,7 @@ class _UploadBox extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: EdgeInsets.symmetric(vertical: 24),
         decoration: BoxDecoration(
           border: Border.all(
             color: AppColors.orangePrimary.withValues(alpha: 0.4),
@@ -332,7 +325,7 @@ class _UploadBox extends StatelessWidget {
               height: 40,
               width: 40,
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(

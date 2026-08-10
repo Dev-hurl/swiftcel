@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swiftcel/core/constants/app_fonts.dart';
 
 class SavedCard {
   final String type; // 'visa' | 'corporate'
@@ -64,283 +65,263 @@ class _PaymentMethodsState extends State<PaymentMethods> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.local_shipping,
-                  color: Color(0xFFD32F2F),
-                  size: 20,
+      appBar: AppBar(
+        title: Text('Settings', style: AppFonts.headlineMedium),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(20),
+        children: [
+          Text(
+            'Payment Methods',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 4),
+          Text(
+            'Manage your cards and billing details securely.',
+            style: TextStyle(color: Colors.black54, fontSize: 13),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'YOUR SAVED CARDS',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black54,
                 ),
-                const SizedBox(width: 6),
-                const Text(
-                  'SwiftCel',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFD32F2F),
-                  ),
-                ),
-                const Spacer(),
-                const Icon(Icons.notifications_none, color: Colors.black87),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Payment Methods',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Manage your cards and billing details securely.',
-              style: TextStyle(color: Colors.black54, fontSize: 13),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'YOUR SAVED CARDS',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black54,
-                  ),
-                ),
-                Text(
-                  '${_cards.length} Active',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFD32F2F),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ..._cards.map(
-              (c) =>
-                  c.type == 'visa' ? _VisaCard(card: c) : _GenericCard(card: c),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: const Color(0xFFF5D5D5)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 34,
-                        width: 34,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD32F2F),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.add_card,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+              Text(
+                '${_cards.length} Active',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFFD32F2F),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ..._cards.map(
+            (c) =>
+                c.type == 'visa' ? _VisaCard(card: c) : _GenericCard(card: c),
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: const Color(0xFFF5D5D5)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 34,
+                      width: 34,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD32F2F),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Add New Card',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Card Number',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _cardNumberController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: '0000 0000 0000 0000',
-                      suffixIcon: const Icon(Icons.credit_card, size: 20),
-                      filled: true,
-                      fillColor: const Color(0xFFFAFAFA),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      child: const Icon(
+                        Icons.add_card,
+                        color: Colors.white,
+                        size: 18,
                       ),
                     ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Add New Card',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Card Number',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _cardNumberController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: '0000 0000 0000 0000',
+                    suffixIcon: const Icon(Icons.credit_card, size: 20),
+                    filled: true,
+                    fillColor: const Color(0xFFFAFAFA),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Expiry Date',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: _expiryController,
-                              decoration: InputDecoration(
-                                hintText: 'MM/YY',
-                                filled: true,
-                                fillColor: const Color(0xFFFAFAFA),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'CVV',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: _cvvController,
-                              obscureText: true,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                hintText: '•••',
-                                suffixIcon: const Icon(
-                                  Icons.help_outline,
-                                  size: 18,
-                                ),
-                                filled: true,
-                                fillColor: const Color(0xFFFAFAFA),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: Checkbox(
-                          value: _setAsDefault,
-                          activeColor: const Color(0xFFD32F2F),
-                          onChanged: (v) =>
-                              setState(() => _setAsDefault = v ?? false),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Set as default payment method',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _saveCard,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFD32F2F),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.shield_outlined,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Save Card Securely',
+                          const Text(
+                            'Expiry Date',
                             style: TextStyle(
-                              color: Colors.white,
                               fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: _expiryController,
+                            decoration: InputDecoration(
+                              hintText: 'MM/YY',
+                              filled: true,
+                              fillColor: const Color(0xFFFAFAFA),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'CVV',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: _cvvController,
+                            obscureText: true,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: '•••',
+                              suffixIcon: const Icon(
+                                Icons.help_outline,
+                                size: 18,
+                              ),
+                              filled: true,
+                              fillColor: const Color(0xFFFAFAFA),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 22,
+                      width: 22,
+                      child: Checkbox(
+                        value: _setAsDefault,
+                        activeColor: const Color(0xFFD32F2F),
+                        onChanged: (v) =>
+                            setState(() => _setAsDefault = v ?? false),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Set as default payment method',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _saveCard,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFD32F2F),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.shield_outlined,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Save Card Securely',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
-                        Icons.verified_user_outlined,
-                        size: 14,
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      Icons.verified_user_outlined,
+                      size: 14,
+                      color: Colors.black45,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      'PCI-DSS COMPLIANT',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
                         color: Colors.black45,
                       ),
-                      SizedBox(width: 6),
-                      Text(
-                        'PCI-DSS COMPLIANT',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black45,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Your payment data is encrypted and never stored\non our servers.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 11, color: Colors.black38),
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Your payment data is encrypted and never stored\non our servers.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 11, color: Colors.black38),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -387,7 +368,7 @@ class _VisaCard extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.wifi, color: Colors.white, size: 16),
+                child: Icon(Icons.wifi, color: Colors.white, size: 16),
               ),
             ],
           ),

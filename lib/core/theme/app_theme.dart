@@ -11,9 +11,16 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.scaffoldBg,
     fontFamily: 'Plus Jakarta Sans',
 
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.orangeSecondary,
+    colorScheme: ColorScheme.light(
+      primary: AppColors.orangePrimary,
+      secondary: AppColors.orangeSecondary,
+      tertiary: AppColors.orangeContainer,
       surface: AppColors.surface,
+      surfaceBright: AppColors.white,
+      surfaceContainerLowest:AppColors.greyBg ,
+      surfaceContainerHigh: AppColors.surfaceVariant,
+      onSurface: AppColors.onSurface,
+      onSurfaceVariant: AppColors.onSurfaceVariant,
       error: AppColors.error,
     ),
 
@@ -43,25 +50,7 @@ class AppTheme {
       titleTextStyle: AppFonts.titleLarge,
     ),
 
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.orangeSecondary,
-        foregroundColor: AppColors.white,
-        padding: EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        textStyle: AppFonts.labelLarge.copyWith(color: Colors.white),
-      ),
-    ),
-
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.onSurface,
-        padding: EdgeInsets.symmetric(vertical: 14),
-        side: BorderSide(color: AppColors.surfaceVariant),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-        textStyle: AppFonts.labelLarge,
-      ),
-    ),
+    
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(

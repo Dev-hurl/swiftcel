@@ -254,7 +254,7 @@ class _SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppFonts.bodyMedium.copyWith(
+                    style: AppFonts.bodyLarge.copyWith(
                       color: AppColors.onSurface,
                       fontWeight: FontWeight.w600,
                     ),

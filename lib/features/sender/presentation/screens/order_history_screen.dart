@@ -5,11 +5,15 @@ class OrderHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Order History'),),
-      body: Center(
-        child: Column(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Order History', style: textTheme.headlineMedium),
       ),
+      body: Center(child: Column()),
     );
   }
 }

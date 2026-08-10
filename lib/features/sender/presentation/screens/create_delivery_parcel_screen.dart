@@ -5,6 +5,12 @@ class CreateDeliveryParcelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(),
+    );
   }
 }

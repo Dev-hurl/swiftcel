@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
 
 enum ChatCounterpart { sender, rider, support }
 
@@ -114,136 +115,79 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.local_shipping,
-                        color: Color(0xFFD32F2F),
-                        size: 20,
-                      ),
-                      const SizedBox(width: 6),
-                      const Text(
-                        'SwiftCel',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFD32F2F),
-                        ),
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.search, color: Colors.black54),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Messages',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () {
-                          // TODO: open new-message / support contact picker
-                        },
-                        icon: const Icon(
-                          Icons.edit_outlined,
-                          size: 16,
-                          color: Color(0xFFD32F2F),
-                        ),
-                        label: const Text(
-                          'Compose',
-                          style: TextStyle(
-                            color: Color(0xFFD32F2F),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      _FilterChip(
-                        label: 'All',
-                        isSelected: _selected == ChatFilter.all,
-                        onTap: () => setState(() => _selected = ChatFilter.all),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'Senders',
-                        isSelected: _selected == ChatFilter.senders,
-                        onTap: () =>
-                            setState(() => _selected = ChatFilter.senders),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'Riders',
-                        isSelected: _selected == ChatFilter.riders,
-                        onTap: () =>
-                            setState(() => _selected = ChatFilter.riders),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'Support',
-                        isSelected: _selected == ChatFilter.support,
-                        onTap: () =>
-                            setState(() => _selected = ChatFilter.support),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-                    itemCount: _filteredChats.length,
-                    itemBuilder: (context, index) => _ChatTile(
-                      chat: _filteredChats[index],
-                      onTap: () {
-                        // TODO: Navigator.push to '/chat/:chatId' with real chatId
-                      },
+      appBar: AppBar(
+        title: Text('Messages', style: textheme.headlineMedium),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    _FilterChip(
+                      label: 'All',
+                      isSelected: _selected == ChatFilter.all,
+                      onTap: () => setState(() => _selected = ChatFilter.all),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: FloatingActionButton(
-                backgroundColor: const Color(0xFFD32F2F),
-                onPressed: () {
-                  // TODO: open compose/new chat
-                },
-                child: const Icon(
-                  Icons.chat_bubble_outline,
-                  color: Colors.white,
+                    SizedBox(width: 8),
+                    _FilterChip(
+                      label: 'Senders',
+                      isSelected: _selected == ChatFilter.senders,
+                      onTap: () =>
+                          setState(() => _selected = ChatFilter.senders),
+                    ),
+                    SizedBox(width: 8),
+                    _FilterChip(
+                      label: 'Riders',
+                      isSelected: _selected == ChatFilter.riders,
+                      onTap: () =>
+                          setState(() => _selected = ChatFilter.riders),
+                    ),
+                    SizedBox(width: 8),
+                    _FilterChip(
+                      label: 'Support',
+                      isSelected: _selected == ChatFilter.support,
+                      onTap: () =>
+                          setState(() => _selected = ChatFilter.support),
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(height: 24),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 80),
+                  itemCount: _filteredChats.length,
+                  itemBuilder: (context, index) => _ChatTile(
+                    chat: _filteredChats[index],
+                    onTap: () {
+                      // TODO: Navigator.push to '/chat/:chatId' with real chatId
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              backgroundColor: const Color(0xFFD32F2F),
+              onPressed: () {
+                // TODO: open compose/new chat
+              },
+              child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -262,21 +206,23 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFD32F2F) : const Color(0xFFEFEFEF),
+          color: isSelected ? AppColors.orangeSecondary : AppColors.greyBg,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? Colors.transparent : AppColors.surfaceVariant,
+          ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black87,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
+          style: textTheme.labelMedium?.copyWith(color: colorScheme.surface),
         ),
       ),
     );
@@ -301,12 +247,12 @@ class _ChatTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: chat.isPinned
               ? const Border(
-                  left: BorderSide(color: Color(0xFFD32F2F), width: 4),
+                  left: BorderSide(color: AppColors.orangePrimary, width: 4),
                 )
               : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: AppColors.onSurfaceVariant.withValues(alpha: 0.03),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -341,7 +287,7 @@ class _ChatTile extends StatelessWidget {
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: AppColors.success,
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
                       ),

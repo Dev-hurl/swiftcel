@@ -79,7 +79,7 @@ class _SenderHomeState extends State<SenderHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Good Morning', style: textTheme.bodyMedium),
-            Text('Alex Vance', style: textTheme.headlineLarge),//main edit
+            Text('Alex Vance', style: textTheme.headlineLarge),//dev edit
           ],
         ),
         actions: [

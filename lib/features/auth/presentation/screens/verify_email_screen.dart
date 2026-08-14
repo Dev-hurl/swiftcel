@@ -172,7 +172,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       onPressed: _resendLink,
                       child: Text('Resend Link'),
                     ),
-
+                    //Go to signup if user cant be verified to start the process again
                     TextButton.icon(
                       onPressed: () => context.go('/signup'),
                       icon: Icon(Icons.arrow_back_ios_new_rounded),

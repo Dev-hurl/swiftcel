@@ -81,11 +81,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset(
-          'assets/icons/orange transparent logo only.png',
-        ),
+        leading: Image.asset('assets/icons/orange transparent logo only.png'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -117,12 +118,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           SizedBox(height: 24),
                           Text(
                             slide.title,
-                            style: AppFonts.displaySmall.copyWith(
+                            style: textTheme.displaySmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 8),
-                          Text(slide.subtitle, style: AppFonts.titleSmall),
+                          Text(slide.subtitle, style: textTheme.titleSmall),
                           SizedBox(height: 24),
                           Expanded(
                             child: ClipRRect(
@@ -149,13 +150,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: ElevatedButton(
                     onPressed: _onGetStartedPressed,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.orangePrimary,
-                      backgroundColor: AppColors.surface,
+                      foregroundColor: colorScheme.primary,
+                      backgroundColor: colorScheme.surface,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                       elevation: 0,
-                      shadowColor: Colors.black.withValues(alpha: 0.08),
+                      shadowColor: colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.08,
+                      ),
                       padding: EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 14,
@@ -165,7 +168,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       _currentPage == _slides.length - 1
                           ? 'Get Started'
                           : 'Next',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      style: textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -186,17 +191,20 @@ class _PageDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(count, (index) {
         final isActive = index == currentIndex;
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 2),
+          duration: Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(horizontal: 2),
           height: 6,
           width: isActive ? 16 : 6,
           decoration: BoxDecoration(
-            color: isActive ? Colors.black87 : Colors.black26,
+            color: isActive
+                ? colorScheme.onSurface
+                : colorScheme.onSurfaceVariant,
             borderRadius: BorderRadius.circular(3),
           ),
         );

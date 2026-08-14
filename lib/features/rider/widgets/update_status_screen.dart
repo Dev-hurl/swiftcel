@@ -35,9 +35,9 @@ class _UpdateStatusSheetState extends State<UpdateStatusSheet> {
             ),
           ),
           Text('Update Status', style: AppFonts.headlineMedium),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text('Select the current status of the delivery.', style: AppFonts.bodySmall),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _StatusOption(
             icon: Icons.location_on_outlined,
             label: 'Arrived at Stop',
@@ -45,7 +45,7 @@ class _UpdateStatusSheetState extends State<UpdateStatusSheet> {
             isSelected: false,
             onTap: () => setState(() {}),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _StatusOption(
             icon: Icons.inventory_2_outlined,
             label: 'Package Picked Up',
@@ -53,7 +53,7 @@ class _UpdateStatusSheetState extends State<UpdateStatusSheet> {
             isSelected: _selected == DeliveryStopStatus.pickedUp,
             onTap: () => setState(() => _selected = DeliveryStopStatus.pickedUp),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           _StatusOption(
             icon: Icons.check_circle_outline,
             label: 'Delivered',
@@ -68,7 +68,7 @@ class _UpdateStatusSheetState extends State<UpdateStatusSheet> {
               onPressed: () => Navigator.pop(context, _selected),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.orangeSecondary,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
               ),
               child: Text('Confirm', style: AppFonts.labelLarge.copyWith(color: AppColors.white)),

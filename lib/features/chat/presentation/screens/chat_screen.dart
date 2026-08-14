@@ -9,7 +9,7 @@ class ChatMessage {
   final bool isRead;
   final String? mapImagePath;
 
-  const ChatMessage({
+  ChatMessage({
     required this.sender,
     required this.text,
     required this.time,
@@ -30,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _messageController = TextEditingController();
 
   // TODO: replace with real stream from ChatProvider
-  final List<ChatMessage> _messages = const [
+  final List<ChatMessage> _messages = [
     ChatMessage(
       sender: MessageSender.them,
       text:
@@ -72,34 +72,39 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surfaceBright,
         elevation: 0.5,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onSurfaceVariant),
           onPressed: () => Navigator.pop(context),
         ),
         titleSpacing: 0,
         title: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xFFD32F2F),
+              backgroundColor: colorScheme.secondary,
               child: Text(
                 'MC',
-                style: TextStyle(color: Colors.white, fontSize: 11),
+                style: TextStyle(
+                  color: colorScheme.surfaceBright,
+                  fontSize: 11,
+                ),
               ),
             ),
-            const SizedBox(width: 10),
-            const Column(
+            SizedBox(width: 10),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Marcus Chen',
                   style: TextStyle(
-                    color: Colors.black87,
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -118,13 +123,16 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.call_outlined, color: Colors.black54),
+            icon: Icon(
+              Icons.call_outlined,
+              color: colorScheme.onSurfaceVariant,
+            ),
             onPressed: () {
               // TODO: initiate call
             },
           ),
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black54),
+            icon: Icon(Icons.more_vert, color: colorScheme.onSurfaceVariant),
             onPressed: () {},
           ),
         ],
@@ -133,41 +141,44 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               children: [
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFEFEF),
+                      color: Color(0xFFEFEFEF),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
+                    child: Text(
                       'TODAY',
-                      style: TextStyle(fontSize: 11, color: Colors.black45),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 ..._messages.map((m) => _MessageBubble(message: m)),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Row(
-                  children: const [
+                  children: [
                     SizedBox(width: 4),
                     Text(
                       '•••',
                       style: TextStyle(
-                        color: Color(0xFFD32F2F),
+                        color: colorScheme.secondary,
                         letterSpacing: 2,
                       ),
                     ),
                     SizedBox(width: 6),
                     Text(
                       'Marcus is typing...',
-                      style: TextStyle(color: Colors.black45, fontSize: 12),
+                      style: TextStyle(
+                        color: colorScheme.onSurfaceVariant,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -177,58 +188,56 @@ class _ChatScreenState extends State<ChatScreen> {
           SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
                   Container(
                     height: 40,
                     width: 40,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Color(0xFFFCE4E4),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.add,
-                      color: Color(0xFFD32F2F),
+                      color: colorScheme.secondary,
                       size: 20,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       controller: _messageController,
                       decoration: InputDecoration(
                         hintText: 'Type a message...',
-                        suffixIcon: const Icon(
+                        suffixIcon: Icon(
                           Icons.emoji_emotions_outlined,
                           size: 20,
-                          color: Colors.black38,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                         filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ),
+                        fillColor: colorScheme.surfaceContainerLowest,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                          borderSide: BorderSide(color: colorScheme.secondary, width: 4),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   GestureDetector(
                     onTap: _sendMessage,
                     child: Container(
                       height: 40,
                       width: 40,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFD32F2F),
+                      decoration: BoxDecoration(
+                        color: colorScheme.secondary,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.send,
-                        color: Colors.white,
+                        color: colorScheme.surfaceBright,
                         size: 18,
                       ),
                     ),
@@ -249,11 +258,14 @@ class _MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     final isMe = message.sender == MessageSender.me;
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: EdgeInsets.only(bottom: 10),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
@@ -263,27 +275,29 @@ class _MessageBubble extends StatelessWidget {
               : CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isMe ? const Color(0xFFD32F2F) : const Color(0xFFEDEDED),
+                color: isMe
+                    ? colorScheme.secondary
+                    : colorScheme.surfaceContainerHigh,
                 borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(14),
-                  topRight: const Radius.circular(14),
+                  topLeft: Radius.circular(14),
+                  topRight: Radius.circular(14),
                   bottomLeft: Radius.circular(isMe ? 14 : 2),
                   bottomRight: Radius.circular(isMe ? 2 : 14),
                 ),
               ),
               child: Text(
                 message.text,
-                style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black87,
-                  fontSize: 13.5,
-                  height: 1.4,
+                style: textTheme.bodyMedium?.copyWith(
+                  color: isMe
+                      ? colorScheme.surfaceBright
+                      : colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
             if (message.mapImagePath != null) ...[
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
@@ -294,17 +308,20 @@ class _MessageBubble extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   message.time,
-                  style: const TextStyle(fontSize: 10, color: Colors.black45),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 if (isMe && message.isRead) ...[
-                  const SizedBox(width: 4),
-                  const Icon(Icons.done_all, size: 13, color: Colors.green),
+                  SizedBox(width: 4),
+                  Icon(Icons.done_all, size: 13, color: Colors.green),
                 ],
               ],
             ),

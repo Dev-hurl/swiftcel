@@ -96,17 +96,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Notifications', style: AppFonts.headlineMedium),
-      ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Notifications', style: AppFonts.displayMedium),
+              SizedBox(height: 24),
+              Row(
                 children: NotifFilter.values.map((f) {
                   final isSelected = f == _selected;
                   return Padding(
@@ -129,23 +127,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   );
                 }).toList(),
               ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  children: [
+                    _sectionLabel('TODAY'),
+                    ..._today.map((n) => _NotificationTile(item: n)),
+                    const SizedBox(height: 8),
+                    _sectionLabel('YESTERDAY'),
+                    ..._yesterday.map((n) => _NotificationTile(item: n)),
+                  ],
                 ),
-                children: [
-                  _sectionLabel('TODAY'),
-                  ..._today.map((n) => _NotificationTile(item: n)),
-                  const SizedBox(height: 8),
-                  _sectionLabel('YESTERDAY'),
-                  ..._yesterday.map((n) => _NotificationTile(item: n)),
-                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

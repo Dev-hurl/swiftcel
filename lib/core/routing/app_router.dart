@@ -23,11 +23,13 @@ import 'package:swiftcel/features/rider/presentation/screens/rider_edit_profile.
 import 'package:swiftcel/features/rider/presentation/screens/rider_home.dart';
 import 'package:swiftcel/features/rider/presentation/screens/rider_settings_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/withdraw_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/address_search.dart';
 import 'package:swiftcel/features/sender/presentation/screens/create_delivery_address_screen.dart';
-import 'package:swiftcel/features/sender/presentation/screens/create_delivery_parcel_screen.dart';
-import 'package:swiftcel/features/sender/presentation/screens/create_delivery_review_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/create_parcel_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/create_review_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/order_history_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/payment_methods.dart';
+import 'package:swiftcel/features/sender/presentation/screens/rate_rider_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/saved_addresses_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_edit_profile.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_home.dart';
@@ -122,16 +124,20 @@ class AppRouter {
 
         // ---- Sender pushed routes (not tabs) ----
         GoRoute(
-          path: '/sender/create-delivery/address',
+          path: '/sender/delivery-address',
           builder: (_, _) => CreateDeliveryAddressScreen(),
         ),
         GoRoute(
-          path: '/sender/create-delivery/parcel',
-          builder: (_, _) => CreateDeliveryParcelScreen(),
+          path: '/sender/address-search',
+          builder: (_, _) => AddressSearch(),
         ),
         GoRoute(
-          path: '/sender/create-delivery/review',
-          builder: (_, _) => CreateDeliveryReviewScreen(),
+          path: '/sender/create-parcel',
+          builder: (_, _) => CreateParcelScreen(),
+        ),
+        GoRoute(
+          path: '/sender/create-review',
+          builder: (_, _) => CreateReviewScreen(),
         ),
         /*
         GoRoute(
@@ -149,6 +155,7 @@ class AppRouter {
           path: '/sender/saved-addresses',
           builder: (_, _) => SavedAddressesScreen(),
         ),
+        GoRoute(path: '/sender/rating', builder: (_, _) => RateRiderScreen()),
         GoRoute(
           path: '/sender/payment-methods',
           builder: (_, _) => PaymentMethods(),

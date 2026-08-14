@@ -8,38 +8,44 @@ class SupportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Help Center', style: AppFonts.headlineMedium),
+        title: Text('Help Center', style: textTheme.headlineMedium),
         actions: [
           IconButton(
             onPressed: () {
               context.push('/notifications');
             },
-            icon: Icon(Icons.notifications, color: AppColors.onSurfaceVariant),
+            icon: Icon(
+              Icons.notifications,
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Text('How can we help?', style: AppFonts.headlineLarge),
+          Text('How can we help?', style: textTheme.headlineLarge),
           SizedBox(height: 4),
           Text(
             'Search for answers or browse categories below.',
-            style: AppFonts.labelMedium.copyWith(
-              color: AppColors.onSurfaceVariant,
+            style: textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           SizedBox(height: 16),
           TextField(
             decoration: InputDecoration(
               hintText: 'Search FAQs, tracking issues...',
-              prefixIcon: Icon(Icons.search, color: AppColors.orangePrimary),
+              prefixIcon: Icon(Icons.search, color: colorScheme.primary),
               suffixIcon: Icon(Icons.qr_code_scanner, size: 20),
               filled: true,
-              fillColor: AppColors.greyBg,
+              fillColor: colorScheme.surfaceContainerLow,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
                 borderSide: BorderSide.none,
@@ -47,14 +53,11 @@ class SupportScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          Text(
-            'CATEGORIES',
-            style: AppFonts.labelSmall
-          ),
+          Text('CATEGORIES', style: textTheme.labelSmall),
           SizedBox(height: 10),
           _CategoryCard(
             icon: Icons.person_outline,
-            iconBg: AppColors.orangeContainer,
+            iconBg: colorScheme.tertiary,
             title: 'Account',
             subtitle: 'Profile, security & settings',
           ),
@@ -68,24 +71,30 @@ class SupportScreen extends StatelessWidget {
           SizedBox(height: 10),
           _CategoryCard(
             icon: Icons.credit_card,
-            iconBg: AppColors.greyBg,
+            iconBg: colorScheme.surfaceContainerLow,
             title: 'Payment',
             subtitle: 'Invoices, refunds & billing methods',
             chips: ['Refund Policy', 'Update Card', 'Receipts'],
           ),
           SizedBox(height: 20),
-          Text('POPULAR ARTICLES', style: AppFonts.labelSmall),
+          Text('POPULAR ARTICLES', style: textTheme.labelSmall),
           SizedBox(height: 8),
           ..._articles.map((a) => _ArticleTile(text: a)),
           SizedBox(height: 20),
-          Text('DIRECT SUPPORT', style: AppFonts.labelSmall),
+          Text('DIRECT SUPPORT', style: textTheme.labelSmall),
           SizedBox(height: 10),
           Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surfaceBright,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.greyBg, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: colorScheme.onSurface.withValues(alpha: 0.06),
+                  blurRadius: 12,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
             child: Row(
               children: [
@@ -93,12 +102,12 @@ class SupportScreen extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.greyBg,
+                    color: colorScheme.surfaceContainerLow,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.chat_bubble_outline,
-                    color: AppColors.orangePrimary,
+                    color: colorScheme.primary,
                     size: 18,
                   ),
                 ),
@@ -107,19 +116,15 @@ class SupportScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Chat with Support', style: AppFonts.labelLarge),
+                      Text('Chat with Support', style: textTheme.labelLarge),
                       Text(
                         'Available 24/7 • 2 min wait',
-                        style: AppFonts.labelSmall,
+                        style: textTheme.labelSmall,
                       ),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.arrow_forward,
-                  color: AppColors.orangePrimary,
-                  size: 18,
-                ),
+                Icon(Icons.arrow_forward, color: colorScheme.primary, size: 18),
               ],
             ),
           ),
@@ -170,11 +175,21 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.onSurface.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,18 +201,18 @@ class _CategoryCard extends StatelessWidget {
               color: iconBg,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.onSurface, size: 20),
+            child: Icon(icon, color: colorScheme.onSurface, size: 20),
           ),
           SizedBox(height: 10),
           Text(
             title,
-            style: AppFonts.titleMedium.copyWith(fontWeight: FontWeight.bold),
+            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 2),
           Text(
             subtitle,
-            style: AppFonts.labelSmall.copyWith(
-              color: AppColors.onSurfaceVariant,
+            style: textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           if (chips != null) ...[
@@ -207,8 +222,8 @@ class _CategoryCard extends StatelessWidget {
               children: chips!
                   .map(
                     (c) => Chip(
-                      label: Text(c, style: AppFonts.labelSmall),
-                      backgroundColor: AppColors.greyBg,
+                      label: Text(c, style: textTheme.labelSmall),
+                      backgroundColor: colorScheme.surfaceContainerLow,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   )
@@ -227,26 +242,36 @@ class _ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.onSurface.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Icon(
             Icons.description_outlined,
             size: 18,
-            color: AppColors.orangePrimary,
+            color: colorScheme.primary,
           ),
           SizedBox(width: 10),
-          Expanded(child: Text(text, style: AppFonts.labelMedium)),
+          Expanded(child: Text(text, style: textTheme.labelMedium)),
           Icon(
             Icons.chevron_right,
             size: 18,
-            color: AppColors.onSurfaceVariant,
+            color: colorScheme.onSurfaceVariant,
           ),
         ],
       ),
@@ -261,18 +286,27 @@ class _ContactButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.greyBg, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.onSurface.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          Icon(icon, color: AppColors.orangePrimary, size: 20),
+          Icon(icon, color: colorScheme.primary, size: 20),
           SizedBox(height: 6),
-          Text(label, style: AppFonts.labelMedium),
+          Text(label, style: textTheme.labelMedium),
         ],
       ),
     );

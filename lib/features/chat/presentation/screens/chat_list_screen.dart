@@ -48,7 +48,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ChatPreview(
       name: 'Marcus Chen (Sender)',
       initials: 'MC',
-      avatarColor: Color(0xFFD32F2F),
+      avatarColor: AppColors.orangeSecondary,
       counterpart: ChatCounterpart.sender,
       lastMessage: 'The shipment is ready fo...',
       time: '12:45 PM',
@@ -68,7 +68,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ChatPreview(
       name: 'SwiftCel Support Bot',
       initials: '',
-      avatarColor: Color(0xFFD32F2F),
+      avatarColor: AppColors.orangeSecondary,
       counterpart: ChatCounterpart.support,
       lastMessage: 'Your weekly earnings rep...',
       time: '09:15 AM',
@@ -115,11 +115,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages', style: textheme.headlineMedium),
+        title: Text('Messages', style: textTheme.headlineMedium),
         centerTitle: true,
       ),
       body: Stack(
@@ -180,11 +181,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
             bottom: 16,
             right: 16,
             child: FloatingActionButton(
-              backgroundColor: const Color(0xFFD32F2F),
+              backgroundColor: colorScheme.primary,
               onPressed: () {
                 // TODO: open compose/new chat
               },
-              child: const Icon(Icons.chat_bubble_outline, color: Colors.white),
+              child: Icon(
+                Icons.chat_bubble_outline,
+                color: colorScheme.surfaceBright,
+              ),
             ),
           ),
         ],
@@ -212,17 +216,21 @@ class _FilterChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.orangeSecondary : AppColors.greyBg,
+          color: isSelected
+              ? colorScheme.secondary
+              : colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? Colors.transparent : AppColors.surfaceVariant,
-          ),
         ),
         child: Text(
           label,
-          style: textTheme.labelMedium?.copyWith(color: colorScheme.surface),
+          style: textTheme.labelMedium?.copyWith(
+            color: isSelected
+                ? colorScheme.surfaceBright
+                : colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -237,24 +245,25 @@ class _ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(12),
+        margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surfaceBright,
           borderRadius: BorderRadius.circular(14),
           border: chat.isPinned
-              ? const Border(
-                  left: BorderSide(color: AppColors.orangePrimary, width: 4),
-                )
+              ? Border(left: BorderSide(color: colorScheme.primary, width: 4))
               : null,
           boxShadow: [
             BoxShadow(
               color: AppColors.onSurfaceVariant.withValues(alpha: 0.03),
               blurRadius: 6,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -266,15 +275,15 @@ class _ChatTile extends StatelessWidget {
                   radius: 22,
                   backgroundColor: chat.avatarColor,
                   child: chat.counterpart == ChatCounterpart.support
-                      ? const Icon(
+                      ? Icon(
                           Icons.headset_mic,
-                          color: Colors.white,
+                          color: colorScheme.surfaceBright,
                           size: 18,
                         )
                       : Text(
                           chat.initials,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: colorScheme.surfaceBright,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -289,31 +298,28 @@ class _ChatTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.success,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(
+                          color: colorScheme.surfaceBright,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),
               ],
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    chat.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
+                  Text(chat.name, style: textTheme.bodyMedium),
+                  SizedBox(height: 3),
                   Text(
                     chat.lastMessage,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.black54,
+                    style: TextStyle(
+                      color: colorScheme.onSurfaceVariant,
                       fontSize: 12.5,
                     ),
                   ),
@@ -329,8 +335,8 @@ class _ChatTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     color: chat.unreadCount > 0
-                        ? const Color(0xFFD32F2F)
-                        : Colors.black45,
+                        ? AppColors.orangeSecondary
+                        : colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -338,16 +344,19 @@ class _ChatTile extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(6),
                     decoration: const BoxDecoration(
-                      color: Color(0xFFD32F2F),
+                      color: AppColors.orangeSecondary,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${chat.unreadCount}',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                      style: TextStyle(
+                        color: colorScheme.surfaceBright,
+                        fontSize: 10,
+                      ),
                     ),
                   )
                 else if (chat.isRead)
-                  const Icon(Icons.done_all, size: 16, color: Colors.green)
+                  Icon(Icons.done_all, size: 16, color: Colors.green)
                 else if (chat.trailingIcon != null)
                   Icon(chat.trailingIcon, size: 16, color: Colors.black38),
               ],

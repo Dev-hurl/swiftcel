@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class SenderEditProfile extends StatefulWidget {
   const SenderEditProfile({super.key});
@@ -13,11 +12,12 @@ class _SenderEditProfileState extends State<SenderEditProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
+  final String _image = 'assets/images/image.png';
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    bool hasImage = false;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,16 +37,11 @@ class _SenderEditProfileState extends State<SenderEditProfile> {
                     width: 100,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerLowest,
+                      color: colorScheme.surfaceContainerLow,
                       shape: BoxShape.circle,
                     ),
-                    child: hasImage
-                        ? Image.asset(
-                            'assets/images/image.png',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          )
+                    child: _image.isNotEmpty
+                        ? Image.asset(_image)
                         : Center(
                             child: Icon(
                               Icons.person,
@@ -85,10 +80,17 @@ class _SenderEditProfileState extends State<SenderEditProfile> {
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceBright,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: colorScheme.onSurfaceVariant),
+
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.onSurface.withValues(alpha: 0.06),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

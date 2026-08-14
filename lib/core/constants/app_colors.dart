@@ -8,7 +8,8 @@ class AppColors {
   static const Color surface = Color(0xFFF8F9FB); 
   static const Color white = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFE1E2E8); //input fields
-  static const Color greyBg = Color(0xFFF2F4F6); //Grey
+  static const Color greyBgLight = Color(0xFFF2F4F6); //Grey
+  static const Color greyBg = Color(0xFFE0E3E5);
 
   // ─── BRAND ───────────────────────────────────────────
   static const Color orangePrimary = Color(0xFFFF6B35);

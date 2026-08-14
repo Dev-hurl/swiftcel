@@ -46,123 +46,174 @@ class _ProofOfDeliveryScreenState extends State<ProofOfDeliveryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Proof of Delivery', style: AppFonts.titleLarge)),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Text('Complete Delivery', style: AppFonts.headlineLarge),
-            const SizedBox(height: 2),
-            Text('Order #$orderId • ${weightKg}kg', style: AppFonts.bodySmall),
-            const SizedBox(height: 20),
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Capture Photo', style: AppFonts.titleLarge),
-                Text('Required', style: AppFonts.labelSmall.copyWith(color: AppColors.error)),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Proof of Delivery', style: textTheme.headlineMedium),
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Text('Complete Delivery', style: AppFonts.headlineLarge),
+          SizedBox(height: 2),
+          Text('Order #$orderId • ${weightKg}kg', style: AppFonts.bodySmall),
+          SizedBox(height: 20),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Capture Photo', style: AppFonts.titleLarge),
+              Text(
+                'Required',
+                style: textTheme.labelSmall?.copyWith(color: AppColors.error),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          GestureDetector(
+            onTap: _capturePhoto,
+            child: Container(
+              height: 180,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(16),
+                image: _capturedPhotoPath != null
+                    ? DecorationImage(
+                        image: AssetImage(_capturedPhotoPath!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
+              child: _capturedPhotoPath == null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.camera_alt_outlined,
+                            size: 32,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Tap to capture photo',
+                            style: AppFonts.bodySmall,
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
             ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: _capturePhoto,
-              child: Container(
-                height: 180,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
-                  borderRadius: BorderRadius.circular(16),
-                  image: _capturedPhotoPath != null
-                      ? DecorationImage(image: AssetImage(_capturedPhotoPath!), fit: BoxFit.cover)
-                      : null,
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Ensure the parcel and house number are clearly visible.',
+            style: AppFonts.labelSmall,
+          ),
+          SizedBox(height: 24),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Receiver Signature', style: AppFonts.titleLarge),
+              GestureDetector(
+                onTap: _clearSignature,
+                child: Row(
+                  children: [
+                    Icon(Icons.refresh, size: 14, color: colorScheme.secondary),
+                    SizedBox(width: 4),
+                    Text(
+                      'Clear',
+                      style: AppFonts.labelSmall.copyWith(
+                        color: colorScheme.secondary,
+                      ),
+                    ),
+                  ],
                 ),
-                child: _capturedPhotoPath == null
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Container(
+            height: 140,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.surfaceVariant),
+            ),
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                setState(
+                  () => _signaturePoints = [
+                    ..._signaturePoints,
+                    details.localPosition,
+                  ],
+                );
+              },
+              child: CustomPaint(
+                painter: _SignaturePainter(_signaturePoints),
+                child: _signaturePoints.isEmpty
                     ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.camera_alt_outlined, size: 32, color: AppColors.onSurfaceVariant),
-                            const SizedBox(height: 8),
-                            Text('Tap to capture photo', style: AppFonts.bodySmall),
-                          ],
+                        child: Text(
+                          'Sign on the line above',
+                          style: AppFonts.labelSmall.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
                         ),
                       )
                     : null,
               ),
             ),
-            const SizedBox(height: 6),
-            Text('Ensure the parcel and house number are clearly visible.', style: AppFonts.labelSmall),
-            const SizedBox(height: 24),
+          ),
+          SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Receiver Signature', style: AppFonts.titleLarge),
-                GestureDetector(
-                  onTap: _clearSignature,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.refresh, size: 14, color: AppColors.orangeSecondary),
-                      const SizedBox(width: 4),
-                      Text('Clear', style: AppFonts.labelSmall.copyWith(color: AppColors.orangeSecondary)),
-                    ],
-                  ),
-                ),
-              ],
+          Text('Receiver Name', style: AppFonts.titleSmall),
+          SizedBox(height: 8),
+          TextField(
+            controller: _receiverNameController,
+            decoration: InputDecoration(
+              hintText: 'e.g., Jonathan Doe',
+              filled: true,
+              fillColor: colorScheme.surfaceContainerLow,
             ),
-            const SizedBox(height: 10),
-            Container(
-              height: 140,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.surfaceVariant),
+          ),
+          SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _submitProof,
+              icon: Icon(
+                Icons.check_circle_outline,
+                size: 18,
+                color: colorScheme.surfaceBright,
               ),
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  setState(() => _signaturePoints = [..._signaturePoints, details.localPosition]);
-                },
-                child: CustomPaint(
-                  painter: _SignaturePainter(_signaturePoints),
-                  child: _signaturePoints.isEmpty
-                      ? Center(
-                          child: Text('Sign on the line above', style: AppFonts.labelSmall.copyWith(color: AppColors.onSurfaceVariant)),
-                        )
-                      : null,
+              label: Text(
+                'Submit Proof',
+                style: AppFonts.labelLarge.copyWith(color: colorScheme.surfaceBright),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.secondary,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-
-            Text('Receiver Name', style: AppFonts.titleSmall),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _receiverNameController,
-              decoration: InputDecoration(hintText: 'e.g., Jonathan Doe'),
+          ),
+          SizedBox(height: 8),
+          Center(
+            child: Text(
+              'This action will finalize the delivery status.',
+              style: AppFonts.labelSmall,
             ),
-            const SizedBox(height: 24),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _submitProof,
-                icon: const Icon(Icons.check_circle_outline, size: 18, color: AppColors.white),
-                label: Text('Submit Proof', style: AppFonts.labelLarge.copyWith(color: AppColors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.orangeSecondary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text('This action will finalize the delivery status.', style: AppFonts.labelSmall),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

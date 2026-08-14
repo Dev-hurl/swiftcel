@@ -37,6 +37,8 @@ class SenderHome extends StatefulWidget {
 class _SenderHomeState extends State<SenderHome> {
   DeliveryStatus? _selectedFilter; // null = All
 
+  final String _images = 'assets/images/image.png';
+
   // TODO: replace with real stream from DeliveryProvider
   final List<DeliveryPreview> _deliveries = [
     DeliveryPreview(
@@ -76,22 +78,22 @@ class _SenderHomeState extends State<SenderHome> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Good Morning', style: textTheme.labelMedium),
-            Text('Alex Vance', style: textTheme.headlineMedium),
+            Text('Good Morning', style: textTheme.bodyMedium),
+            Text('Alex Vance', style: textTheme.headlineLarge),
           ],
         ),
         actions: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: colorScheme.surfaceContainerHigh,
-            child: IconButton(
-              onPressed: () {
-                context.push('/notifications');
-              },
-              icon: Icon(
-                Icons.person_2_rounded,
-                color: colorScheme.onSurfaceVariant,
-              ),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              context.push('/sender/edit-profile');
+            },
+            child: CircleAvatar(
+              radius: 24,
+              backgroundColor: colorScheme.surfaceContainerLow,
+              child: _images.isNotEmpty
+                  ? Image.asset(_images)
+                  : Icon(Icons.person, color: colorScheme.onSurfaceVariant),
             ),
           ),
           SizedBox(width: 10),
@@ -102,7 +104,7 @@ class _SenderHomeState extends State<SenderHome> {
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHigh,
+                  color: colorScheme.surfaceContainerLow,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
@@ -213,7 +215,7 @@ class _SenderHomeState extends State<SenderHome> {
                 iconColor: colorScheme.secondary,
                 label: 'Send parcel',
                 onTap: () {
-                  context.push('/sender/create-delivery/address');
+                  context.push('/sender/create-parcel');
                 },
               ),
               _ActionItem(
@@ -240,7 +242,7 @@ class _SenderHomeState extends State<SenderHome> {
                 iconColor: Color(0xFF6D4C41),
                 label: 'Services',
                 onTap: () {
-                  context.go('/support');
+                  context.push('/support');
                 },
               ),
             ],

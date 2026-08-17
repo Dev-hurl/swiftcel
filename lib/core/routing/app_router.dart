@@ -16,7 +16,7 @@ import 'package:swiftcel/features/rider/presentation/screens/active_delivery_scr
 import 'package:swiftcel/features/rider/presentation/screens/delivery_history.dart';
 import 'package:swiftcel/features/rider/presentation/screens/document_verification.dart';
 import 'package:swiftcel/features/rider/presentation/screens/earning_screen.dart';
-import 'package:swiftcel/features/sender/presentation/screens/finder_rider_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/finding_rider_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/job_details_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/multi_job_details_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/proof_of_delivery.dart';

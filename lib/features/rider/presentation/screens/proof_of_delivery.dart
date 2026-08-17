@@ -12,7 +12,7 @@ class ProofOfDeliveryScreen extends StatefulWidget {
 
 class _ProofOfDeliveryScreenState extends State<ProofOfDeliveryScreen> {
   final _receiverNameController = TextEditingController();
-  String? _capturedPhotoPath; // TODO: populate via image_picker
+  String? _capturedPhotoPath;
   List<Offset> _signaturePoints = []; // simplified — see note below
 
   // TODO: replace with real delivery data via widget.deliveryId
@@ -226,7 +226,7 @@ class _SignaturePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.onSurface
+      ..color = AppColors.orangeSecondary
       ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
 

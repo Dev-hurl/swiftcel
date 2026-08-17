@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
-import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class OnboardingSlide {

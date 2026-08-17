@@ -16,6 +16,7 @@ import 'package:swiftcel/features/rider/presentation/screens/active_delivery_scr
 import 'package:swiftcel/features/rider/presentation/screens/delivery_history.dart';
 import 'package:swiftcel/features/rider/presentation/screens/document_verification.dart';
 import 'package:swiftcel/features/rider/presentation/screens/earning_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/finder_rider_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/job_details_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/multi_job_details_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/proof_of_delivery.dart';
@@ -39,7 +40,7 @@ import 'package:swiftcel/main.dart';
 
 class AppRouter {
   static const bool debugMode = false;
-  static const String debugInitialLocation = '/rider/active-delivery/test123';
+  static const String debugInitialLocation = '/sender/finding-rider/test123';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
@@ -145,12 +146,13 @@ class AppRouter {
           builder: (_, state) => DeliveryDetailsScreen(
             deliveryId: state.pathParameters['deliveryId']!,
           ),
-        ),
-        GoRoute(
-          path: '/sender/rate-rider/:deliveryId',
-          builder: (_, state) =>
-              RateRiderScreen(deliveryId: state.pathParameters['deliveryId']!),
         ),*/
+        GoRoute(
+          path: '/sender/finding-rider/:deliveryId',
+          builder: (_, state) => FindingRiderScreen(
+            deliveryId: state.pathParameters['deliveryId']!,
+          ),
+        ),
         GoRoute(
           path: '/sender/saved-addresses',
           builder: (_, _) => SavedAddressesScreen(),

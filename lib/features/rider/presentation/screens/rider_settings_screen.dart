@@ -275,22 +275,48 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
             ),
             SizedBox(height: 24),
 
-            _SettingsTile(
-              icon: Icons.headphones,
-              title: 'Contact Support',
-              onTap: () {
-                context.push('/support');
-              },
-            ),
-            _SettingsTile(
-              icon: Icons.logout_rounded,
-              title: 'Log Out',
-              onTap: () async {
-                await context.read<AuthProvider>().logout();
-                if (context.mounted) {
-                  context.go('/login');
-                }
-              },
+            Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceBright,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.onSurface.withValues(alpha: 0.06),
+                    blurRadius: 12,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _buildSectionHeader(
+                    Icon(Icons.tune, color: colorScheme.primary),
+                    'Session ',
+                  ),
+                  Divider(
+                    color: colorScheme.surfaceContainerLow,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  _SettingsTile(
+                    icon: Icons.headphones,
+                    title: 'Contact Support',
+                    onTap: () {
+                      context.push('/support');
+                    },
+                  ),
+                  _SettingsTile(
+                    icon: Icons.logout_rounded,
+                    title: 'Log Out',
+                    onTap: () async {
+                      await context.read<AuthProvider>().logout();
+                      if (context.mounted) {
+                        context.go('/login');
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -423,14 +449,15 @@ class _WorkSettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (subtitle != null)
                     Text(
                       subtitle!,
-                      style: textTheme.labelMedium?.copyWith(
+                      style: textTheme.labelSmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),

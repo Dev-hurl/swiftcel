@@ -92,19 +92,59 @@ class _RiderHomeState extends State<RiderHome> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset(
-          'assets/icons/orange transparent logo only.png',
-          width: 60,
-          height: 60,
+        actionsPadding: EdgeInsets.symmetric(horizontal: 24),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Good Morning', style: textTheme.bodyMedium),
+            Text('Alex Mercer', style: textTheme.headlineLarge),
+          ],
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              context.push('/notifications');
-            },
-            icon: Icon(Icons.notifications),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerLowest,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    context.push('/notifications');
+                  },
+                  icon: Icon(Icons.notifications_none),
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              Positioned(
+                top: -6,
+                right: -3,
+                child: Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '1',
+                      style: textTheme.labelMedium?.copyWith(
+                        color: colorScheme.surface,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -123,13 +163,13 @@ class _RiderHomeState extends State<RiderHome> {
                           Icon(
                             Icons.map_outlined,
                             size: 64,
-                            color: AppColors.orangePrimary,
+                            color: colorScheme.primary,
                           ),
                           SizedBox(height: 12),
                           Text(
                             'Map view — pending Maps API activation',
                             style: TextStyle(
-                              color: AppColors.onSurfaceVariant,
+                              color: colorScheme.onSurfaceVariant,
                               fontSize: 12,
                             ),
                           ),
@@ -149,11 +189,13 @@ class _RiderHomeState extends State<RiderHome> {
                     child: Container(
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: AppColors.white,
+                        color: colorScheme.surfaceBright,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.onSurface.withValues(alpha: 0.05),
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.05,
+                            ),
                             blurRadius: 16,
                             offset: Offset(0, 8),
                           ),
@@ -216,6 +258,9 @@ class _ToggleSegment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -223,12 +268,12 @@ class _ToggleSegment extends StatelessWidget {
         height: 36,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.orangePrimary : Colors.transparent,
+          color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: isSelected
-                  ? AppColors.onSurface.withValues(alpha: 0.05)
+                  ? colorScheme.onSurface.withValues(alpha: 0.05)
                   : Colors.transparent,
               blurRadius: 20,
             ),
@@ -239,13 +284,13 @@ class _ToggleSegment extends StatelessWidget {
             Icon(
               icon,
               size: 15,
-              color: isSelected ? AppColors.surface : AppColors.onSurface,
+              color: isSelected ? colorScheme.surface : colorScheme.onSurface,
             ),
             SizedBox(width: 5),
             Text(
               label,
-              style: AppFonts.titleLarge.copyWith(
-                color: isSelected ? AppColors.surface : AppColors.onSurface,
+              style: textTheme.titleLarge?.copyWith(
+                color: isSelected ? colorScheme.surface : colorScheme.onSurface,
               ),
             ),
           ],
@@ -259,21 +304,21 @@ class _JobOfferCard extends StatelessWidget {
   final JobOffer offer;
   final int secondsLeft;
 
-  const _JobOfferCard({
-    required this.offer,
-    required this.secondsLeft,
-  });
+  const _JobOfferCard({required this.offer, required this.secondsLeft});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 100),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurfaceVariant.withValues(alpha: 0.1),
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
             blurRadius: 12,
           ),
         ],
@@ -285,7 +330,7 @@ class _JobOfferCard extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.orangeContainer,
+              color: colorScheme.tertiary,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Row(
@@ -297,15 +342,15 @@ class _JobOfferCard extends StatelessWidget {
                       height: 6,
                       width: 6,
                       decoration: BoxDecoration(
-                        color: AppColors.orangePrimary,
+                        color: colorScheme.primary,
                         shape: BoxShape.circle,
                       ),
                     ),
                     SizedBox(width: 6),
                     Text(
                       'NEW JOB AVAILABLE',
-                      style: AppFonts.labelSmall.copyWith(
-                        color: AppColors.orangeSecondary,
+                      style: textTheme.labelSmall?.copyWith(
+                        color: colorScheme.secondary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -316,13 +361,13 @@ class _JobOfferCard extends StatelessWidget {
                     Icon(
                       Icons.access_time,
                       size: 12,
-                      color: AppColors.orangeSecondary,
+                      color: colorScheme.secondary,
                     ),
                     SizedBox(width: 4),
                     Text(
                       '${secondsLeft}s',
-                      style: AppFonts.labelSmall.copyWith(
-                        color: AppColors.orangeSecondary,
+                      style: textTheme.labelSmall?.copyWith(
+                        color: colorScheme.secondary,
                       ),
                     ),
                   ],
@@ -345,7 +390,7 @@ class _JobOfferCard extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.inventory_2_outlined,
-                        color: AppColors.onSurface,
+                        color: colorScheme.onSurface,
                         size: 18,
                       ),
                     ),
@@ -356,11 +401,11 @@ class _JobOfferCard extends StatelessWidget {
                         children: [
                           Text(
                             offer.category,
-                            style: AppFonts.titleLarge.copyWith(
+                            style: textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(offer.subCategory, style: AppFonts.labelSmall),
+                          Text(offer.subCategory, style: textTheme.labelSmall),
                         ],
                       ),
                     ),
@@ -369,8 +414,8 @@ class _JobOfferCard extends StatelessWidget {
                       children: [
                         Text(
                           '\$${offer.payout.toStringAsFixed(2)}',
-                          style: AppFonts.titleLarge.copyWith(
-                            color: AppColors.orangePrimary,
+                          style: textTheme.titleLarge?.copyWith(
+                            color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -383,7 +428,7 @@ class _JobOfferCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
+                    color: colorScheme.surfaceContainerHigh,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -391,14 +436,14 @@ class _JobOfferCard extends StatelessWidget {
                       Icon(
                         Icons.location_on_outlined,
                         size: 16,
-                        color: AppColors.onSurfaceVariant,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       SizedBox(width: 6),
-                      Text('PICKUP', style: AppFonts.labelSmall),
+                      Text('PICKUP', style: textTheme.labelSmall),
                       SizedBox(width: 8),
                       Text(
                         '${offer.distanceKm}km away',
-                        style: AppFonts.titleSmall,
+                        style: textTheme.titleSmall,
                       ),
                     ],
                   ),
@@ -412,16 +457,16 @@ class _JobOfferCard extends StatelessWidget {
                     icon: Icon(
                       Icons.description_outlined,
                       size: 18,
-                      color: AppColors.white,
+                      color: colorScheme.surfaceBright,
                     ),
                     label: Text(
                       'View Job Details',
-                      style: AppFonts.labelLarge.copyWith(
-                        color: AppColors.white,
+                      style: textTheme.labelLarge?.copyWith(
+                        color: colorScheme.surfaceBright,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.orangePrimary,
+                      backgroundColor: colorScheme.primary,
                       padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -441,14 +486,15 @@ class _JobOfferCard extends StatelessWidget {
 class _JobListView extends StatelessWidget {
   final List<JobOffer> offers;
 
-  const _JobListView({
-    required this.offers,
-  });
+  const _JobListView({required this.offers});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
-      color: AppColors.surface,
+      color: colorScheme.surface,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(16, 70, 16, 16),
         itemCount: offers.length,
@@ -460,11 +506,11 @@ class _JobListView extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 12),
               padding: EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: colorScheme.surfaceBright,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.onSurface.withValues(alpha: 0.05),
+                    color: colorScheme.onSurface.withValues(alpha: 0.05),
                     blurRadius: 6,
                   ),
                 ],
@@ -475,13 +521,13 @@ class _JobListView extends StatelessWidget {
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.greyBg,
+                      color: colorScheme.surfaceContainerLowest,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       Icons.inventory_2_outlined,
                       size: 18,
-                      color: AppColors.orangeSecondary,
+                      color: colorScheme.secondary,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -500,7 +546,7 @@ class _JobListView extends StatelessWidget {
                           '${offer.distanceKm}km away · Deliver by ${offer.deliverByTime}',
                           style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.onSurface,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       ],
@@ -509,7 +555,7 @@ class _JobListView extends StatelessWidget {
                   Text(
                     '\$${offer.payout.toStringAsFixed(2)}',
                     style: TextStyle(
-                      color: Color(0xFFD32F2F),
+                      color: colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

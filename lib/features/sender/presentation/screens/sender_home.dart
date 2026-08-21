@@ -116,8 +116,8 @@ class _SenderHomeState extends State<SenderHome> {
                 ),
               ),
               Positioned(
-                top: -8,
-                right: -2,
+                 top: -6,
+                right: -3,
                 child: Container(
                   height: 20,
                   width: 20,

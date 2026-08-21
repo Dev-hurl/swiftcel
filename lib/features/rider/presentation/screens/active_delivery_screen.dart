@@ -3,11 +3,18 @@ import 'package:swiftcel/features/rider/widgets/update_status_screen.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_fonts.dart';
 
-enum DeliveryStopStatus { pickedUp, inTransit, delivered }
+enum DeliveryStopStatus {
+  arrived,
+  pickedUp,
+  inTransit,
+  delivered,
+  recipientUnavailable,
+  returned,
+}
 
 class ActiveDeliveryScreen extends StatefulWidget {
   final String deliveryId;
-  const ActiveDeliveryScreen({super.key, required this.deliveryId});
+  ActiveDeliveryScreen({super.key, required this.deliveryId});
 
   @override
   State<ActiveDeliveryScreen> createState() => _ActiveDeliveryScreenState();
@@ -16,8 +23,11 @@ class ActiveDeliveryScreen extends StatefulWidget {
 class _ActiveDeliveryScreenState extends State<ActiveDeliveryScreen> {
   // TODO: replace with real data from DeliveryProvider, keyed by widget.deliveryId
   DeliveryStopStatus _currentStatus = DeliveryStopStatus.inTransit;
-  final String senderName = 'Olivia Smith';
-  final double distanceToNextStop = 1.2;
+  final String senderName = 'Ethan Brooks';
+  final String senderLocation = 'Melbourne VIC 3000';
+  final String trackingNumber = '34AP123456789';
+  final String routeLabel = 'Active Multi-stop Route';
+  final String timeRemaining = '2h 15m';
 
   Future<void> _openUpdateStatusSheet() async {
     final result = await showModalBottomSheet<DeliveryStopStatus>(
@@ -32,228 +42,373 @@ class _ActiveDeliveryScreenState extends State<ActiveDeliveryScreen> {
       // TODO: write updated status to Firestore delivery doc
 
       if (result == DeliveryStopStatus.delivered && mounted) {
-        // TODO: navigate to ProofOfDeliveryScreen once status hits "delivered"
-        // context.push('/rider/proof-of-delivery/${widget.deliveryId}');
+        // TODO: context.push('/rider/proof-of-delivery/${widget.deliveryId}');
       }
     }
   }
 
+  void _copyTrackingNumber() {
+    // TODO: Clipboard.setData(ClipboardData(text: trackingNumber))
+  }
+
+  final String _image = 'assets/images/image.png';
+
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Active Delivery', style: AppFonts.headlineMedium),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 16),
+        leading: BackButton(),
         centerTitle: true,
+        title: Text('Tracking', style: textTheme.headlineMedium),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+            icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
+            onPressed: () {
+              // TODO: overflow menu — report issue, contact support, etc.
+            },
+          ),
+        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  color: AppColors.surfaceVariant,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.map_outlined,
-                          size: 64,
-                          color: AppColors.orangePrimary.withValues(alpha: 0.4),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Map view — pending Maps API activation',
-                          style: AppFonts.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(24),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    color: colorScheme.surfaceContainerLowest,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.map_outlined,
+                            size: 64,
+                            color: AppColors.orangePrimary.withValues(
+                              alpha: 0.4,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Map view — pending Maps API activation',
+                            style: textTheme.bodySmall,
+                          ),
+                        ],
                       ),
                     ),
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'STOP 1 OF 3',
-                              style: AppFonts.labelSmall.copyWith(
-                                color: AppColors.orangeSecondary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              'Next: ${distanceToNextStop}mi',
-                              style: AppFonts.labelSmall,
-                            ),
-                          ],
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceBright,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(24),
                         ),
-                        const SizedBox(height: 14),
-                        _StopProgressBar(currentStatus: _currentStatus),
-                        const SizedBox(height: 18),
-                        Row(
-                          children: [
-                            const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: AppColors.surfaceVariant,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 22,
+                                backgroundColor:
+                                    colorScheme.surfaceContainerLowest,
+                                child: _image.isNotEmpty
+                                    ? Image.asset(_image, fit: BoxFit.cover)
+                                    : Center(
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 40,
+                                          color: colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                              ),
+                              SizedBox(width: 12),
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('SENDER', style: AppFonts.labelSmall),
-                                  Text(senderName, style: AppFonts.titleSmall),
+                                  Text(senderName, style: textTheme.titleLarge),
+                                  Text(
+                                    senderLocation,
+                                    style: textTheme.bodySmall,
+                                  ),
                                 ],
                               ),
-                            ),
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: AppColors.surfaceVariant,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: const Icon(
-                                  Icons.chat_bubble_outline,
-                                  size: 18,
-                                  color: AppColors.onSurface,
+                              Spacer(),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surfaceContainerLowest,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                onPressed: () {
-                                  // TODO: navigate to '/chat/:chatId' for this delivery
-                                },
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.chat_bubble_outline,
+                                    size: 18,
+                                    color: colorScheme.onSurface,
+                                  ),
+                                  tooltip: 'Chat Sender',
+                                  onPressed: () {
+                                    // TODO: navigate to '/chat/:chatId' for this delivery
+                                  },
+                                ),
                               ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Container(
+                            padding: EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: colorScheme.surfaceContainerLowest,
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 18),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: _openUpdateStatusSheet,
-                            icon: const Icon(
-                              Icons.refresh,
-                              size: 18,
-                              color: AppColors.white,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      trackingNumber,
+                                      style: textTheme.titleSmall?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    IconButton(
+                                      onPressed: _copyTrackingNumber,
+                                      icon: Icon(
+                                        Icons.copy_outlined,
+                                        size: 18,
+                                        color: colorScheme.onSurfaceVariant,
+                                        shadows: [
+                                          BoxShadow(
+                                            color: colorScheme.surfaceBright,
+                                            blurRadius: 2,
+                                            offset: Offset(-2, 9),
+                                          ),
+                                        ],
+                                      ),
+                                      tooltip: 'Copy',
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 14),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.surfaceBright,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: colorScheme.onSurfaceVariant
+                                                .withValues(alpha: 0.06),
+                                            blurRadius: 2,
+                                            offset: Offset(-2, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        'In Transit',//TODO ; show that stop one is complete
+                                        style: textTheme.labelSmall?.copyWith(
+                                          color: colorScheme.primary,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      '$timeRemaining remaining',
+                                      style: textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            label: Text(
-                              'Update Status',
-                              style: AppFonts.labelLarge.copyWith(
-                                color: AppColors.white,
+                          ),
+                          SizedBox(height: 16),
+                          _StopSummaryList(),
+                          SizedBox(height: 18),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: _openUpdateStatusSheet,
+                              icon: Icon(
+                                Icons.refresh,
+                                size: 18,
+                                color: colorScheme.surfaceBright,
                               ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.orangeSecondary,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
+                              label: Text(
+                                'Update Status',
+                                style: textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.surfaceBright,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorScheme.primary,
+                                padding: EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _StopProgressBar extends StatelessWidget {
-  final DeliveryStopStatus currentStatus;
-  const _StopProgressBar({required this.currentStatus});
+class _StopSummaryList extends StatelessWidget {
+  const _StopSummaryList();
 
   @override
   Widget build(BuildContext context) {
-    final steps = [
+    // TODO: replace with real stop data — mock, matches reference design's 3-stop layout
+    const stops = [
       (
-        label: 'Picked Up',
-        status: DeliveryStopStatus.pickedUp,
-        icon: Icons.check,
+        title: 'Stop 1: Current Delivery',
+        subtitle: 'Melbourne VIC 3000',
+        state: 'active',
+        subSteps: [
+          ('Picked Up', true),
+          ('In Transit (Active)', true),
+          ('Delivered', false),
+        ],
       ),
       (
-        label: 'In Transit',
-        status: DeliveryStopStatus.inTransit,
-        icon: Icons.local_shipping_outlined,
+        title: 'Stop 2: Next Delivery',
+        subtitle: 'Richmond VIC 3121',
+        state: 'pending',
+        subSteps: <(String, bool)>[],
       ),
       (
-        label: 'Delivered',
-        status: DeliveryStopStatus.delivered,
-        icon: Icons.inventory_2_outlined,
+        title: 'Stop 3: Final Delivery',
+        subtitle: 'South Yarra VIC 3141',
+        state: 'pending',
+        subSteps: <(String, bool)>[],
       ),
     ];
-    final currentIndex = currentStatus.index;
 
-    return Row(
-      children: List.generate(steps.length, (index) {
-        final step = steps[index];
-        final isDone = index < currentIndex;
-        final isActive = index == currentIndex;
-        final color = isDone || isActive
-            ? AppColors.orangeSecondary
-            : AppColors.surfaceVariant;
+    return Column(
+      children: List.generate(stops.length, (index) {
+        final stop = stops[index];
+        final isActive = stop.state == 'active';
+        final isLast = index == stops.length - 1;
 
-        return Expanded(
+        final textTheme = Theme.of(context).textTheme;
+        final colorScheme = Theme.of(context).colorScheme;
+
+        return IntrinsicHeight(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 children: [
                   Container(
-                    height: 32,
-                    width: 32,
+                    height: 22,
+                    width: 22,
                     decoration: BoxDecoration(
-                      color: isDone
-                          ? AppColors.success
-                          : (isActive
-                                ? AppColors.orangeSecondary
-                                : AppColors.surfaceVariant),
+                      color: isActive
+                          ? colorScheme.primary
+                          : colorScheme.surfaceContainerLowest,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      isDone ? Icons.check : step.icon,
-                      size: 16,
-                      color: isDone || isActive
-                          ? AppColors.white
-                          : AppColors.onSurfaceVariant,
+                    child: isActive
+                        ? Icon(
+                            Icons.circle,
+                            size: 8,
+                            color: colorScheme.surfaceBright,
+                          )
+                        : null,
+                  ),
+                  if (!isLast)
+                    Expanded(
+                      child: Container(
+                        width: 2,
+                        margin: EdgeInsets.symmetric(vertical: 2),
+                        color: colorScheme.surfaceContainerLowest,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    step.label,
-                    style: AppFonts.labelSmall.copyWith(color: color),
-                  ),
                 ],
               ),
-              if (index < steps.length - 1)
-                Expanded(
-                  child: Container(
-                    height: 2,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    color: isDone
-                        ? AppColors.success
-                        : AppColors.surfaceVariant,
+              SizedBox(width: 12),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: isLast ? 0 : 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        stop.title,
+                        style: textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isActive
+                              ? colorScheme.onSurface
+                              : colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      Text(stop.subtitle, style: textTheme.labelSmall),
+                      if (stop.subSteps.isNotEmpty) ...[
+                        SizedBox(height: 6),
+                        ...stop.subSteps.map(
+                          (sub) => Padding(
+                            padding: EdgeInsets.only(top: 3),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  sub.$2
+                                      ? Icons.check_circle
+                                      : Icons.circle_outlined,
+                                  size: 12,
+                                  color: sub.$2
+                                      ? AppColors.success
+                                      : colorScheme.onSurfaceVariant,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  sub.$1,
+                                  style: textTheme.labelSmall?.copyWith(
+                                    color: sub.$2
+                                        ? colorScheme.onSurface
+                                        : colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
+              ),
             ],
           ),
         );

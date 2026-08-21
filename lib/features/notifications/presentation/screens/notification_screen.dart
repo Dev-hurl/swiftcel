@@ -95,6 +95,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -102,7 +104,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Notifications', style: AppFonts.displayMedium),
+              Text('Notifications', style: textTheme.headlineLarge),
               SizedBox(height: 24),
               Row(
                 children: NotifFilter.values.map((f) {

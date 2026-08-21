@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
-import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class RiderSettingsScreen extends StatefulWidget {
@@ -151,7 +150,7 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
               child: Column(
                 children: [
                   _buildSectionHeader(
-                    Icon(Icons.bike_scooter, color: colorScheme.primary),
+                    Icon(Icons.person, color: colorScheme.primary),
                     'Account and Security',
                   ),
                   Divider(
@@ -334,9 +333,7 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
           hIcon,
           Text(
             title,
-            style: textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -390,9 +387,9 @@ class _SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodyLarge?.copyWith(
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   if (subtitle != null)
@@ -449,9 +446,9 @@ class _WorkSettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodyLarge?.copyWith(
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   if (subtitle != null)

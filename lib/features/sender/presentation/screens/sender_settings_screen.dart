@@ -27,7 +27,7 @@ class _SenderSettingsScreenState extends State<SenderSettingsScreen> {
         child: ListView(
           padding: EdgeInsets.all(16),
           children: [
-            Text('Settings', style: textTheme.displayMedium),
+            Text('Settings', style: textTheme.headlineLarge),
             SizedBox(height: 24),
             Container(
               padding: EdgeInsets.all(14),

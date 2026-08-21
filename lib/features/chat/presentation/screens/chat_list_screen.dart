@@ -14,7 +14,6 @@ class ChatPreview {
   final String time;
   final int unreadCount;
   final bool isRead;
-  final bool isPinned;
   final bool isOnline;
   final IconData? trailingIcon;
 
@@ -27,7 +26,6 @@ class ChatPreview {
     required this.time,
     this.unreadCount = 0,
     this.isRead = false,
-    this.isPinned = false,
     this.isOnline = false,
     this.trailingIcon,
   });
@@ -48,12 +46,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ChatPreview(
       name: 'Marcus Chen (Sender)',
       initials: 'MC',
-      avatarColor: AppColors.orangeSecondary,
+      avatarColor: AppColors.orangePrimary,
       counterpart: ChatCounterpart.sender,
       lastMessage: 'The shipment is ready fo...',
       time: '12:45 PM',
       unreadCount: 2,
-      isPinned: true,
       isOnline: true,
     ),
     ChatPreview(
@@ -68,7 +65,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ChatPreview(
       name: 'SwiftCel Support Bot',
       initials: '',
-      avatarColor: AppColors.orangeSecondary,
+      avatarColor: AppColors.orangePrimary,
       counterpart: ChatCounterpart.support,
       lastMessage: 'Your weekly earnings rep...',
       time: '09:15 AM',
@@ -219,7 +216,7 @@ class _FilterChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? colorScheme.secondary
+              ? colorScheme.primary
               : colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(20),
         ),
@@ -256,12 +253,10 @@ class _ChatTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surfaceBright,
           borderRadius: BorderRadius.circular(14),
-          border: chat.isPinned
-              ? Border(left: BorderSide(color: colorScheme.primary, width: 4))
-              : null,
+          
           boxShadow: [
             BoxShadow(
-              color: AppColors.onSurfaceVariant.withValues(alpha: 0.03),
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.03),
               blurRadius: 6,
               offset: Offset(0, 2),
             ),
@@ -326,7 +321,7 @@ class _ChatTile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -335,16 +330,16 @@ class _ChatTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     color: chat.unreadCount > 0
-                        ? AppColors.orangeSecondary
+                        ? AppColors.orangePrimary
                         : colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 if (chat.unreadCount > 0)
                   Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: AppColors.orangeSecondary,
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.orangePrimary,
                       shape: BoxShape.circle,
                     ),
                     child: Text(

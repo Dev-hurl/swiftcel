@@ -20,22 +20,18 @@ class _RiderEditProfileState extends State<RiderEditProfile> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: SafeArea(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Edit Profile',
-                    style: textTheme.displayMedium,
-                    
-                  ),
+                  child: Text('Edit Profile', style: textTheme.headlineLarge),
                 ),
-                SizedBox(height: 24
-                ),
+                SizedBox(height: 24),
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -87,7 +83,14 @@ class _RiderEditProfileState extends State<RiderEditProfile> {
                   decoration: BoxDecoration(
                     color: colorScheme.surfaceBright,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: colorScheme.onSurfaceVariant),
+                    //border: Border.all(color: colorScheme.onSurfaceVariant),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.onSurface.withValues(alpha: 0.06),
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(24),

@@ -52,7 +52,7 @@ class _ProofOfDeliveryScreenState extends State<ProofOfDeliveryScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Proof of Delivery', style: textTheme.headlineMedium),
+        title: Text('Proof of Delivery', style: textTheme.headlineLarge),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),

@@ -5,6 +5,13 @@ class DeliveryHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final textTheme = Theme.of(context).textTheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Proof of Delivery', style: textTheme.headlineLarge),
+      ),
+    );
   }
 }

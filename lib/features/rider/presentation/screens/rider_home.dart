@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
-import 'package:swiftcel/core/constants/app_fonts.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart'; // TODO: restore once Maps billing resolves
 
 enum RiderViewMode { map, list }
@@ -266,7 +265,7 @@ class _ToggleSegment extends StatelessWidget {
       child: Container(
         width: 100,
         height: 36,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         decoration: BoxDecoration(
           color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
@@ -283,7 +282,7 @@ class _ToggleSegment extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 15,
+              size: 16,
               color: isSelected ? colorScheme.surface : colorScheme.onSurface,
             ),
             SizedBox(width: 5),
@@ -401,7 +400,7 @@ class _JobOfferCard extends StatelessWidget {
                         children: [
                           Text(
                             offer.category,
-                            style: textTheme.titleLarge?.copyWith(
+                            style: textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -461,7 +460,7 @@ class _JobOfferCard extends StatelessWidget {
                     ),
                     label: Text(
                       'View Job Details',
-                      style: textTheme.labelLarge?.copyWith(
+                      style: textTheme.labelMedium?.copyWith(
                         color: colorScheme.surfaceBright,
                       ),
                     ),
@@ -537,9 +536,8 @@ class _JobListView extends StatelessWidget {
                       children: [
                         Text(
                           offer.category,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
+                          style: textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(

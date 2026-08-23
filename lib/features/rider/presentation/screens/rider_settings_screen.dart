@@ -62,8 +62,18 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$tier • ', style: textTheme.labelSmall),
-                      Text('$rating ', style: textTheme.labelSmall),
+                      Text(
+                        '$tier • ',
+                        style: textTheme.labelMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      Text(
+                        '$rating ',
+                        style: textTheme.labelMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                       Icon(Icons.star, size: 14, color: AppColors.warning),
                     ],
                   ),
@@ -82,7 +92,7 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
                         ),
                         child: Text(
                           proLevel,
-                          style: textTheme.labelSmall?.copyWith(
+                          style: textTheme.labelMedium?.copyWith(
                             color: colorScheme.surface,
                           ),
                         ),
@@ -99,7 +109,7 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
                         ),
                         child: Text(
                           joinedYear,
-                          style: textTheme.labelSmall?.copyWith(
+                          style: textTheme.labelMedium?.copyWith(
                             color: colorScheme.onSurface,
                           ),
                         ),
@@ -333,7 +343,7 @@ class _RiderSettingsScreenState extends State<RiderSettingsScreen> {
           hIcon,
           Text(
             title,
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -387,9 +397,9 @@ class _SettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodySmall?.copyWith(
+                    style: textTheme.bodyLarge?.copyWith(
                       color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (subtitle != null)
@@ -446,9 +456,9 @@ class _WorkSettingsTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: textTheme.bodySmall?.copyWith(
+                    style: textTheme.bodyLarge?.copyWith(
                       color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (subtitle != null)

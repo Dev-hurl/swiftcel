@@ -10,7 +10,7 @@ class DeliveryHistory extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Proof of Delivery', style: textTheme.headlineLarge),
+        title: Text('Delivery History', style: textTheme.headlineMedium),
       ),
     );
   }

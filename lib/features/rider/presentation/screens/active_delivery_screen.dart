@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiftcel/features/rider/widgets/update_status_screen.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_fonts.dart';
 
 enum DeliveryStopStatus {
   arrived,
@@ -14,7 +13,7 @@ enum DeliveryStopStatus {
 
 class ActiveDeliveryScreen extends StatefulWidget {
   final String deliveryId;
-  ActiveDeliveryScreen({super.key, required this.deliveryId});
+  const ActiveDeliveryScreen({super.key, required this.deliveryId});
 
   @override
   State<ActiveDeliveryScreen> createState() => _ActiveDeliveryScreenState();
@@ -170,7 +169,7 @@ class _ActiveDeliveryScreenState extends State<ActiveDeliveryScreen> {
                           ),
                           SizedBox(height: 16),
                           Container(
-                            padding: EdgeInsets.all(14),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: colorScheme.surfaceContainerLowest,
                               borderRadius: BorderRadius.circular(14),
@@ -181,8 +180,8 @@ class _ActiveDeliveryScreenState extends State<ActiveDeliveryScreen> {
                                   children: [
                                     Text(
                                       trackingNumber,
-                                      style: textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.w600,
+                                      style: textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Spacer(),
@@ -192,63 +191,50 @@ class _ActiveDeliveryScreenState extends State<ActiveDeliveryScreen> {
                                         Icons.copy_outlined,
                                         size: 18,
                                         color: colorScheme.onSurfaceVariant,
-                                        shadows: [
-                                          BoxShadow(
-                                            color: colorScheme.surfaceBright,
-                                            blurRadius: 2,
-                                            offset: Offset(-2, 9),
-                                          ),
-                                        ],
                                       ),
                                       tooltip: 'Copy',
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 14),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: colorScheme.surfaceBright,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: colorScheme.onSurfaceVariant
-                                                .withValues(alpha: 0.06),
-                                            blurRadius: 2,
-                                            offset: Offset(-2, 1),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Text(
-                                        'In Transit',//TODO ; show that stop one is complete
-                                        style: textTheme.labelSmall?.copyWith(
-                                          color: colorScheme.primary,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '$timeRemaining remaining',
-                                      style: textTheme.labelSmall?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surfaceContainerLowest,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  'In Transit', //TODO ; show that stop one is complete
+                                  style: textTheme.labelSmall?.copyWith(
+                                    color: colorScheme.primary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                '$timeRemaining remaining',
+                                style: textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(height: 16),
                           _StopSummaryList(),
-                          SizedBox(height: 18),
+                          SizedBox(height: 24),
                           SizedBox(
                             width: double.infinity,
+                            height: 52,
                             child: ElevatedButton.icon(
                               onPressed: _openUpdateStatusSheet,
                               icon: Icon(
@@ -367,14 +353,19 @@ class _StopSummaryList extends StatelessWidget {
                     children: [
                       Text(
                         stop.title,
-                        style: textTheme.bodyMedium?.copyWith(
+                        style: textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: isActive
                               ? colorScheme.onSurface
                               : colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      Text(stop.subtitle, style: textTheme.labelSmall),
+                      Text(
+                        stop.subtitle,
+                        style: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                       if (stop.subSteps.isNotEmpty) ...[
                         SizedBox(height: 6),
                         ...stop.subSteps.map(
@@ -394,7 +385,7 @@ class _StopSummaryList extends StatelessWidget {
                                 SizedBox(width: 6),
                                 Text(
                                   sub.$1,
-                                  style: textTheme.labelSmall?.copyWith(
+                                  style: textTheme.labelMedium?.copyWith(
                                     color: sub.$2
                                         ? colorScheme.onSurface
                                         : colorScheme.onSurfaceVariant,

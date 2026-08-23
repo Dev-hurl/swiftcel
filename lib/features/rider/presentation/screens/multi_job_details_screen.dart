@@ -1,8 +1,7 @@
 // lib/features/rider/presentation/screens/multi_stop_job_details_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_fonts.dart';
+import 'package:swiftcel/core/constants/app_colors.dart';
 
 enum StopType { pickup, stop, finalDestination }
 
@@ -16,7 +15,7 @@ class RouteStop {
   final String? parcelId;
   final ParcelSize? size;
 
-  const RouteStop({
+  RouteStop({
     required this.type,
     required this.label,
     required this.address,
@@ -29,7 +28,7 @@ class RouteStop {
 class MultiStopJobDetailsScreen extends StatefulWidget {
   final String jobId; // TODO: not yet wired to real data — mock stops below
 
-  const MultiStopJobDetailsScreen({super.key, required this.jobId});
+  MultiStopJobDetailsScreen({super.key, required this.jobId});
 
   @override
   State<MultiStopJobDetailsScreen> createState() =>
@@ -56,7 +55,10 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
 
     final jobId = widget.jobId;
 
-    const stops = [
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final stops = [
       RouteStop(
         type: StopType.pickup,
         label: 'Pickup Point',
@@ -91,7 +93,7 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Job Details', style: AppFonts.headlineMedium),
+        title: Text('Job Details', style: textTheme.headlineMedium),
         centerTitle: true,
       ),
       body: Column(
@@ -103,7 +105,7 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                 Container(
                   height: 300,
                   width: double.infinity,
-                  color: AppColors.surfaceVariant,
+                  color: colorScheme.surfaceContainerHigh,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -111,12 +113,12 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                         Icon(
                           Icons.map_outlined,
                           size: 40,
-                          color: AppColors.orangePrimary.withValues(alpha: 0.4),
+                          color: colorScheme.primary.withValues(alpha: 0.4),
                         ),
                         SizedBox(height: 6),
                         Text(
                           'Map view — pending Maps API activation',
-                          style: AppFonts.labelSmall,
+                          style: textTheme.labelSmall,
                         ),
                       ],
                     ),
@@ -133,7 +135,7 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                             child: _StatCard(
                               label: 'TOTAL EST.',
                               value: '$totalDistance mi',
-                              valueColor: AppColors.orangeSecondary,
+                              valueColor: colorScheme.secondary,
                             ),
                           ),
                           SizedBox(width: 10),
@@ -141,10 +143,10 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                             child: _StatCard(
                               label: 'STOPS',
                               value: '$totalStops',
-                              valueColor: AppColors.onSurface,
+                              valueColor: colorScheme.onSurface,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Expanded(
                             child: _StatCard(
                               label: 'EARNINGS',
@@ -157,7 +159,9 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                       SizedBox(height: 24),
                       Text(
                         'ROUTE SEQUENCE',
-                        style: AppFonts.labelMedium.copyWith(letterSpacing: 1),
+                        style: textTheme.labelMedium?.copyWith(
+                          letterSpacing: 1,
+                        ),
                       ),
                       SizedBox(height: 12),
                       ...List.generate(stops.length, (index) {
@@ -174,10 +178,10 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
           Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: colorScheme.surfaceBright,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.onSurface.withValues(alpha: 0.03),
+                  color: colorScheme.onSurface.withValues(alpha: 0.03),
                   blurRadius: 10,
                   offset: Offset(0, -2),
                 ),
@@ -196,29 +200,26 @@ class _MultiStopJobDetailsScreenState extends State<MultiStopJobDetailsScreen> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                       ),
-                      child: Text(
-                        'Decline',
-                        style: TextStyle(color: Colors.black87),
-                      ),
+                      child: Text('Decline', style: textTheme.labelMedium),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton(
                       onPressed: () => _acceptJob(context, jobId),
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: AppColors.orangePrimary,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: colorScheme.primary,
+                        padding: EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
                       ),
                       child: Text(
                         'Accept Job',
-                        style: TextStyle(
-                          color: AppColors.surface,
+                        style: textTheme.labelMedium?.copyWith(
+                          color: colorScheme.surface,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -247,17 +248,20 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         children: [
-          Text(value, style: AppFonts.titleLarge.copyWith(color: valueColor)),
+          Text(value, style: textTheme.titleLarge?.copyWith(color: valueColor)),
           SizedBox(height: 2),
-          Text(label, style: AppFonts.labelSmall),
+          Text(label, style: textTheme.labelSmall),
         ],
       ),
     );
@@ -272,17 +276,20 @@ class _RouteStopTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     final (dotColor, icon) = switch (stop.type) {
       StopType.pickup => (AppColors.success, Icons.local_shipping_outlined),
-      StopType.stop => (AppColors.orangeSecondary, Icons.circle),
-      StopType.finalDestination => (AppColors.orangePrimary, Icons.location_on),
+      StopType.stop => (colorScheme.secondary, Icons.circle),
+      StopType.finalDestination => (colorScheme.primary, Icons.location_on),
     };
 
     final (sizeLabel, sizeColor) = switch (stop.size) {
       ParcelSize.small => ('SMALL', AppColors.success),
       ParcelSize.medium => ('MEDIUM', AppColors.warning),
       ParcelSize.large => ('LARGE', AppColors.error),
-      null => ('', AppColors.onSurfaceVariant),
+      null => ('', colorScheme.onSurfaceVariant),
     };
 
     return Padding(
@@ -315,7 +322,7 @@ class _RouteStopTile extends StatelessWidget {
                       child: Container(
                         width: 2,
                         margin: EdgeInsets.symmetric(vertical: 4),
-                        color: AppColors.surfaceVariant,
+                        color: colorScheme.surfaceContainerHigh,
                       ),
                     ),
                 ],
@@ -331,19 +338,19 @@ class _RouteStopTile extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(stop.label, style: AppFonts.titleLarge),
+                        Text(stop.label, style: textTheme.titleLarge),
                         Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceVariant,
+                            color: colorScheme.surfaceContainerHigh,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             '${stop.distanceFromPrevious}mi',
-                            style: AppFonts.labelSmall,
+                            style: textTheme.labelSmall,
                           ),
                         ),
                       ],
@@ -351,7 +358,7 @@ class _RouteStopTile extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       stop.address.replaceAll('\n', ', '),
-                      style: AppFonts.bodyMedium,
+                      style: textTheme.bodyMedium,
                     ),
                     if (stop.parcelId != null) ...[
                       SizedBox(height: 10),
@@ -362,9 +369,11 @@ class _RouteStopTile extends StatelessWidget {
                           vertical: 12,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: colorScheme.surfaceBright,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.surfaceVariant),
+                          border: Border.all(
+                            color: colorScheme.surfaceContainerHigh,
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -374,10 +383,13 @@ class _RouteStopTile extends StatelessWidget {
                                 Icon(
                                   Icons.inventory_2_outlined,
                                   size: 16,
-                                  color: AppColors.onSurfaceVariant,
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                                 SizedBox(width: 6),
-                                Text(stop.parcelId!, style: AppFonts.bodySmall),
+                                Text(
+                                  stop.parcelId!,
+                                  style: textTheme.bodySmall,
+                                ),
                               ],
                             ),
                             Container(
@@ -391,9 +403,9 @@ class _RouteStopTile extends StatelessWidget {
                               ),
                               child: Text(
                                 sizeLabel,
-                                style: AppFonts.labelSmall.copyWith(
+                                style: textTheme.labelSmall?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.surface,
+                                  color: colorScheme.surface,
                                 ),
                               ),
                             ),

@@ -107,16 +107,38 @@ class _UpdateStatusSheetState extends State<UpdateStatusSheet> {
                 setState(() => _selected = DeliveryStopStatus.returned),
           ),
           SizedBox(height: 20),
-          Center(
-            child: TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancel',
-                style: textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: SizedBox(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      //
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.surfaceBright,
+                    ),
+                    child: Text('Update'),
+                  ),
                 ),
               ),
-            ),
+              Expanded(
+                child: SizedBox(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      'Cancel',
+                      style: textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -162,7 +184,6 @@ class _StatusOption extends StatelessWidget {
                     ? colorScheme.tertiary
                     : colorScheme.surfaceContainerLow),
           borderRadius: BorderRadius.circular(14),
-          
         ),
         child: Row(
           children: [

@@ -56,7 +56,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ChatPreview(
       name: 'Sarah Jenkins (Rider)',
       initials: 'SJ',
-      avatarColor: Color(0xFF43A047),
+      avatarColor: AppColors.success,
       counterpart: ChatCounterpart.rider,
       lastMessage: "I've just arrived at the dro...",
       time: '11:30 AM',
@@ -64,7 +64,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
     ),
     ChatPreview(
       name: 'SwiftCel Support Bot',
-      initials: '',
+      initials: 'bot',
       avatarColor: AppColors.orangePrimary,
       counterpart: ChatCounterpart.support,
       lastMessage: 'Your weekly earnings rep...',
@@ -253,7 +253,7 @@ class _ChatTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surfaceBright,
           borderRadius: BorderRadius.circular(14),
-          
+
           boxShadow: [
             BoxShadow(
               color: colorScheme.onSurfaceVariant.withValues(alpha: 0.03),
@@ -277,7 +277,7 @@ class _ChatTile extends StatelessWidget {
                         )
                       : Text(
                           chat.initials,
-                          style: TextStyle(
+                          style: textTheme.labelMedium?.copyWith(
                             color: colorScheme.surfaceBright,
                             fontWeight: FontWeight.bold,
                           ),
@@ -307,15 +307,19 @@ class _ChatTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(chat.name, style: textTheme.bodyMedium),
+                  Text(
+                    chat.name,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   SizedBox(height: 3),
                   Text(
                     chat.lastMessage,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: textTheme.labelMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
-                      fontSize: 12.5,
                     ),
                   ),
                 ],
@@ -327,10 +331,9 @@ class _ChatTile extends StatelessWidget {
               children: [
                 Text(
                   chat.time,
-                  style: TextStyle(
-                    fontSize: 11,
+                  style: textTheme.labelSmall?.copyWith(
                     color: chat.unreadCount > 0
-                        ? AppColors.orangePrimary
+                        ? colorScheme.primary
                         : colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -339,21 +342,24 @@ class _ChatTile extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: AppColors.orangePrimary,
+                      color: colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${chat.unreadCount}',
-                      style: TextStyle(
+                      style: textTheme.labelSmall?.copyWith(
                         color: colorScheme.surfaceBright,
-                        fontSize: 10,
                       ),
                     ),
                   )
                 else if (chat.isRead)
                   Icon(Icons.done_all, size: 16, color: Colors.green)
                 else if (chat.trailingIcon != null)
-                  Icon(chat.trailingIcon, size: 16, color: Colors.black38),
+                  Icon(
+                    chat.trailingIcon,
+                    size: 16,
+                    color: colorScheme.onSurface,
+                  ),
               ],
             ),
           ],

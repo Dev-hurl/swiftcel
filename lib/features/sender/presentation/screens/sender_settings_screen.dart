@@ -200,6 +200,7 @@ class _SenderSettingsScreenState extends State<SenderSettingsScreen> {
             SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
+              height: 52,
               child: OutlinedButton.icon(
                 onPressed: () async {
                   await context.read<AuthProvider>().logout();
@@ -210,7 +211,7 @@ class _SenderSettingsScreenState extends State<SenderSettingsScreen> {
                 icon: Icon(Icons.logout, color: AppColors.error, size: 18),
                 label: Text(
                   'Log Out',
-                  style: TextStyle(
+                  style: textTheme.labelMedium?.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.w600,
                   ),

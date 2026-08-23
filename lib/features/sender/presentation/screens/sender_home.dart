@@ -79,7 +79,7 @@ class _SenderHomeState extends State<SenderHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Good Morning', style: textTheme.bodyMedium),
-            Text('Alex Vance', style: textTheme.headlineLarge),//dev edit
+            Text('Alex Vance', style: textTheme.headlineLarge), //dev edit
           ],
         ),
         actions: [
@@ -116,7 +116,7 @@ class _SenderHomeState extends State<SenderHome> {
                 ),
               ),
               Positioned(
-                 top: -6,
+                top: -6,
                 right: -3,
                 child: Container(
                   height: 20,
@@ -201,10 +201,7 @@ class _SenderHomeState extends State<SenderHome> {
           ),
           SizedBox(height: 24),
 
-          Text(
-            'What would you like to do?',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-          ),
+          Text('What would you like to do?', style: textTheme.bodyLarge),
           SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -373,9 +370,8 @@ class _ShipmentCard extends StatelessWidget {
                   children: [
                     Text(
                       delivery.trackingId,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                      style: textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(

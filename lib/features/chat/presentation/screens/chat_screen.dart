@@ -19,7 +19,7 @@ class ChatMessage {
 }
 
 class ChatScreen extends StatefulWidget {
-  final String chatId; // TODO: use to load real thread from ChatProvider
+  final String chatId;
   const ChatScreen({super.key, required this.chatId});
 
   @override
@@ -91,9 +91,8 @@ class _ChatScreenState extends State<ChatScreen> {
               backgroundColor: colorScheme.secondary,
               child: Text(
                 'MC',
-                style: TextStyle(
+                style: textTheme.labelSmall?.copyWith(
                   color: colorScheme.surfaceBright,
-                  fontSize: 11,
                 ),
               ),
             ),
@@ -220,7 +219,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide(color: colorScheme.secondary, width: 4),
+                          borderSide: BorderSide(
+                            color: colorScheme.secondary,
+                            width: 4,
+                          ),
                         ),
                       ),
                     ),

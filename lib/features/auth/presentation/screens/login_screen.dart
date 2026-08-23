@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
-import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -42,8 +41,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final authProvider = context.read<AuthProvider>();
 
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      //backgroundColor: Colors.white,
       body: Column(
         children: [
           // Hero
@@ -52,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.onSurface, AppColors.onSurfaceVariant],
+                colors: [colorScheme.onSurface, colorScheme.onSurfaceVariant],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -65,17 +66,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     RichText(
                       text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 26,
+                        style: textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.surface,
-                          height: 1.2,
+                          height: 1.4,
                         ),
                         children: [
-                          TextSpan(text: 'TRACK, SHIP,\n'),
+                          TextSpan(
+                            text: 'TRACK, SHIP,\n',
+                            style: textTheme.displaySmall?.copyWith(
+                              color: colorScheme.surfaceBright,
+                            ),
+                          ),
                           TextSpan(
                             text: 'MANAGE',
-                            style: TextStyle(color: AppColors.orangePrimary),
+                            style: textTheme.displaySmall?.copyWith(
+                              color: colorScheme.primary,
+                            ),
                           ),
                         ],
                       ),
@@ -92,11 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: colorScheme.surfaceBright,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.onSurface.withValues(alpha: 0.05),
+                      color: colorScheme.onSurface.withValues(alpha: 0.05),
                       blurRadius: 20,
                       offset: Offset(0, 8),
                     ),
@@ -105,27 +111,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Welcome Back', style: AppFonts.displayMedium),
+                    Text('Welcome Back', style: textTheme.displayMedium),
                     SizedBox(height: 20),
                     TextField(
                       controller: _identifierController,
                       decoration: InputDecoration(
-                        hintText: 'Email or Phone',
-                        hintStyle: AppFonts.labelLarge.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                        hintText: 'Email Address',
+                        hintStyle: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
                         ),
                         prefixIcon: Icon(Icons.mail_outline, size: 20),
                         filled: true,
-                        fillColor: AppColors.greyBg,
+                        fillColor: colorScheme.surfaceContainerLowest,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: AppColors.orangePrimary,
-                          ),
+                          borderSide: BorderSide(color: colorScheme.primary),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -139,8 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         hintText: 'Password',
-                        hintStyle: AppFonts.labelLarge.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                        hintStyle: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
                         ),
                         prefixIcon: Icon(Icons.lock_outline, size: 20),
                         suffixIcon: IconButton(
@@ -155,16 +159,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         filled: true,
-                        fillColor: AppColors.greyBg,
+                        fillColor: colorScheme.surfaceContainerLowest,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: AppColors.orangePrimary,
-                          ),
+                          borderSide: BorderSide(color: colorScheme.primary),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -177,18 +179,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Checkbox(
                           value: _keepSignedIn,
-                          activeColor: AppColors.orangeSecondary,
+                          activeColor: colorScheme.secondary,
                           onChanged: (v) =>
                               setState(() => _keepSignedIn = v ?? true),
                         ),
-                        Text('Keep me signed in', style: AppFonts.labelMedium),
+                        Text(
+                          'Keep me signed in',
+                          style: textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         Spacer(),
                         TextButton(
                           onPressed: () => context.go('/forgot-password'),
                           child: Text(
                             'Forgot Password?',
-                            style: AppFonts.labelMedium.copyWith(
+                            style: textTheme.labelSmall?.copyWith(
                               color: AppColors.error,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -197,10 +205,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: authProvider.isSubmitting ? null : _login,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.orangePrimary,
+                          backgroundColor: colorScheme.primary,
                           padding: EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -212,13 +221,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color: colorScheme.surfaceBright,
                                 ),
                               )
                             : Text(
                                 'Log In',
-                                style: AppFonts.labelLarge.copyWith(
-                                  color: Colors.white,
+                                style: textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.surfaceBright,
                                 ),
                               ),
                       ),
@@ -231,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           child: Text(
                             'Or Continue With',
-                            style: AppFonts.labelSmall,
+                            style: textTheme.labelSmall,
                           ),
                         ),
                         Expanded(child: Divider()),
@@ -247,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () {},
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: _SocialButton(
                             icon: Icons.apple,
@@ -261,14 +270,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     Center(
                       child: RichText(
                         text: TextSpan(
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                          style: textTheme.labelSmall?.copyWith(),
                           children: [
                             TextSpan(text: "Don't have any account? "),
                             TextSpan(
                               text: 'Sign Up',
-                              style: TextStyle(
-                                color: AppColors.orangePrimary,
-                                fontWeight: FontWeight.w600,
+                              style: textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: colorScheme.secondary,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => context.push('/signup'),
@@ -277,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 12),
                     Center(
                       child: TextButton(
                         onPressed: () {
@@ -285,9 +294,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Text(
                           'Quick Track as Guest →',
-                          style: TextStyle(
-                            color: Color(0xFFD32F2F),
-                            fontSize: 12,
+                          style: textTheme.labelSmall?.copyWith(
+                            color: colorScheme.secondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -316,16 +324,24 @@ class _SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(label, style: const TextStyle(fontSize: 13)),
-      style: FilledButton.styleFrom(
-        backgroundColor: AppColors.greyBg,
-        foregroundColor: AppColors.onSurfaceVariant,
-        padding: EdgeInsets.symmetric(vertical: 12),
-        side: BorderSide(color: Colors.grey.shade300),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      height: 52,
+      child: OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 18),
+        label: Text(label, style: textTheme.labelMedium),
+        style: FilledButton.styleFrom(
+          backgroundColor: colorScheme.surfaceContainerLowest,
+          foregroundColor: colorScheme.onSurfaceVariant,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          side: BorderSide(color: colorScheme.surfaceContainerLow),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }

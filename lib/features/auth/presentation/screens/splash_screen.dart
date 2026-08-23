@@ -31,6 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -44,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(height: 4),
             Text(
               '...Moving your World Faster',
-              style: TextStyle(color: Colors.black87),
+              style: textTheme.labelMedium,
             ),
           ],
         ),

@@ -95,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             colors: [
               AppColors.surface,
               AppColors.orangeContainer,
-            ], // TODO: swap for your exact hex
+            ],
           ),
         ),
         child: SafeArea(
@@ -125,11 +125,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Text(slide.subtitle, style: textTheme.titleSmall),
                           SizedBox(height: 24),
                           Expanded(
+                            
                             child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(16),
+                              borderRadius: BorderRadiusGeometry.circular(
+                                16,
+                              ),
                               child: Image.asset(
                                 slide.imagePath,
-                                fit: BoxFit.cover,
+                               fit: BoxFit.cover,
                               ),
                             ),
                           ),

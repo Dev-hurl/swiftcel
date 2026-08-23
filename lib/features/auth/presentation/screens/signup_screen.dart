@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart' show AppColors;
-import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 enum UserRole { sender, rider }
@@ -69,6 +68,8 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: SafeArea(
@@ -84,11 +85,11 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surfaceBright,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: colorScheme.onSurface.withValues(alpha: 0.05),
                           blurRadius: 20,
                           offset: Offset(0, 8),
                         ),
@@ -99,12 +100,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Create Account', style: AppFonts.displayMedium),
+                          Text(
+                            'Create Account',
+                            style: textTheme.displayMedium,
+                          ),
                           SizedBox(height: 6),
                           Text(
                             'Join the fastest logistics network today.',
-                            style: AppFonts.labelMedium.copyWith(
-                              color: AppColors.onSurfaceVariant,
+                            style: textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
                           SizedBox(height: 24),
@@ -113,7 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: AppColors.greyBg,
+                              color: colorScheme.surfaceContainerLow,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Row(
@@ -244,7 +248,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 width: 24,
                                 child: Checkbox(
                                   value: _agreedToTerms,
-                                  activeColor: AppColors.orangePrimary,
+                                  activeColor: colorScheme.primary,
                                   onChanged: (v) => setState(() {
                                     _agreedToTerms = v ?? false;
                                     if (_agreedToTerms) _showTermsError = false;
@@ -255,15 +259,15 @@ class _SignupScreenState extends State<SignupScreen> {
                               Expanded(
                                 child: RichText(
                                   text: TextSpan(
-                                    style: AppFonts.labelMedium.copyWith(
-                                      color: AppColors.onSurface,
+                                    style: textTheme.labelMedium?.copyWith(
+                                      color: colorScheme.onSurface,
                                     ),
                                     children: [
                                       TextSpan(text: 'I agree to the '),
                                       TextSpan(
                                         text: 'Terms of Service',
-                                        style: AppFonts.labelMedium.copyWith(
-                                          color: AppColors.orangeSecondary,
+                                        style: textTheme.labelMedium?.copyWith(
+                                          color: colorScheme.secondary,
                                         ),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
@@ -272,14 +276,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                                       TextSpan(
                                         text: ' and ',
-                                        style: AppFonts.labelMedium.copyWith(
-                                          color: AppColors.onSurface,
+                                        style: textTheme.labelMedium?.copyWith(
+                                          color: colorScheme.onSurface,
                                         ),
                                       ),
                                       TextSpan(
                                         text: 'Privacy Policy',
-                                        style: AppFonts.labelMedium.copyWith(
-                                          color: AppColors.orangeSecondary,
+                                        style: textTheme.labelMedium?.copyWith(
+                                          color: colorScheme.secondary,
                                         ),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
@@ -299,7 +303,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               padding: EdgeInsets.only(left: 34),
                               child: Text(
                                 'You must agree to continue',
-                                style: AppFonts.labelMedium.copyWith(
+                                style: textTheme.labelMedium?.copyWith(
                                   color: AppColors.error,
                                 ),
                               ),
@@ -314,7 +318,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ? null
                                   : _createAccount,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.orangePrimary,
+                                backgroundColor: colorScheme.primary,
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
@@ -326,7 +330,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        color: Colors.white,
+                                        color: colorScheme.surfaceBright,
                                       ),
                                     )
                                   : Row(
@@ -335,14 +339,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                       children: [
                                         Text(
                                           'Create Account',
-                                          style: AppFonts.labelLarge.copyWith(
-                                            color: AppColors.white,
+                                          style: textTheme.labelLarge?.copyWith(
+                                            color: colorScheme.surfaceBright,
                                           ),
                                         ),
                                         SizedBox(width: 8),
                                         Icon(
                                           Icons.arrow_forward,
-                                          color: AppColors.white,
+                                          color: colorScheme.surfaceBright,
                                           size: 16,
                                         ),
                                       ],
@@ -353,15 +357,15 @@ class _SignupScreenState extends State<SignupScreen> {
                           Center(
                             child: RichText(
                               text: TextSpan(
-                                style: AppFonts.labelMedium.copyWith(
-                                  color: AppColors.onSurfaceVariant,
+                                style: textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                                 children: [
                                   TextSpan(text: 'Already have an account? '),
                                   TextSpan(
                                     text: 'Log In',
-                                    style: AppFonts.labelMedium.copyWith(
-                                      color: AppColors.orangePrimary,
+                                    style: textTheme.labelMedium?.copyWith(
+                                      color: colorScheme.primary,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () => context.push('/login'),
@@ -425,13 +429,16 @@ class _RoleToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.orangePrimary : Colors.transparent,
+          color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(26),
         ),
         child: Row(
@@ -440,15 +447,13 @@ class _RoleToggleButton extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: isSelected ? AppColors.surface : AppColors.onSurface,
+              color: isSelected ? colorScheme.surface : colorScheme.onSurface,
             ),
             SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(
-                color: isSelected ? AppColors.surface : AppColors.onSurface,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+              style: textTheme.labelMedium?.copyWith(
+                color: isSelected ? colorScheme.surface : colorScheme.onSurface,
               ),
             ),
           ],
@@ -464,9 +469,8 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
-    );
+    final textTheme = Theme.of(context).textTheme;
+
+    return Text(text, style: textTheme.labelMedium);
   }
 }

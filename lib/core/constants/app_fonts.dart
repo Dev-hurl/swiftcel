@@ -91,7 +91,7 @@ class AppFonts {
     fontFamily: _fontFamily,
     fontSize: 16,
     height: 24 / 16,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     color: AppColors.onSurface,
   );
 
@@ -108,7 +108,7 @@ class AppFonts {
     fontSize: 12,
     height: 16 / 12,
     fontWeight: FontWeight.w400,
-    color: AppColors.onSurfaceVariant, // secondary content per hierarchy rules
+    color: AppColors.onSurfaceVariant,
   );
 
   // ---- LABELS ----

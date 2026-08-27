@@ -40,7 +40,7 @@ class _CreateDeliveryAddressScreenState
   final String parcelCategory =
       'Electronics'; // TODO: should come from CreateParcelScreen's selection
 
-  List<DestinationStop> _stops = const [
+  List<DestinationStop> _stops = const[
     DestinationStop(number: 1, address: '456 Tech Boulevard, Floor 4'),
     DestinationStop(number: 2, address: '456 Atonsi Boulevard'),
   ];
@@ -48,8 +48,9 @@ class _CreateDeliveryAddressScreenState
   void _toggleStop(int index) {
     setState(() {
       _stops = List.generate(_stops.length, (i) {
-        if (i == index)
+        if (i == index) {
           return _stops[i].copyWith(isExpanded: !_stops[i].isExpanded);
+        }
         return _stops[i];
       });
     });
@@ -76,6 +77,7 @@ class _CreateDeliveryAddressScreenState
     context.push('/sender/create-review');
   }
 
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -86,11 +88,9 @@ class _CreateDeliveryAddressScreenState
         centerTitle: true,
         title: Text(
           'Location Details',
-          style: textTheme.titleLarge,
-          textAlign: TextAlign.center,
+          style: textTheme.headlineMedium,
         ),
       ),
-      backgroundColor: colorScheme.surface,
       body: Column(
         children: [
           Padding(
@@ -117,6 +117,7 @@ class _CreateDeliveryAddressScreenState
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 16),
               children: [
+                //TODO : Make users able to pick from saved address or add new one
                 Container(
                   padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
@@ -239,7 +240,7 @@ class _CreateDeliveryAddressScreenState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Review Summary',
+                      'Review  Parcel Summary',
                       style: textTheme.labelLarge?.copyWith(
                         color: colorScheme.surfaceBright,
                       ),

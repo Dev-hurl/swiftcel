@@ -5,6 +5,17 @@ class SavedAddressesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Saved Addresses',
+          style: textTheme.headlineMedium,
+        ),
+      ),
+    );
   }
 }

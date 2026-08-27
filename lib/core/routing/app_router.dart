@@ -16,6 +16,8 @@ import 'package:swiftcel/features/rider/presentation/screens/active_delivery_scr
 import 'package:swiftcel/features/rider/presentation/screens/delivery_history.dart';
 import 'package:swiftcel/features/rider/presentation/screens/document_verification.dart';
 import 'package:swiftcel/features/rider/presentation/screens/earning_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/bulk_shipment_dashboard_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/capture_parcel_screen.dart';
 import 'package:swiftcel/features/sender/presentation/screens/finding_rider_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/job_details_screen.dart';
 import 'package:swiftcel/features/rider/presentation/screens/multi_job_details_screen.dart';
@@ -35,6 +37,7 @@ import 'package:swiftcel/features/sender/presentation/screens/saved_addresses_sc
 import 'package:swiftcel/features/sender/presentation/screens/sender_edit_profile.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_home.dart';
 import 'package:swiftcel/features/sender/presentation/screens/sender_settings_screen.dart';
+import 'package:swiftcel/features/sender/presentation/screens/track_parcel_screen.dart';
 import 'package:swiftcel/features/support/presentation/screens/support_screen.dart';
 import 'package:swiftcel/main.dart';
 
@@ -99,8 +102,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/sender/history',
-                  builder: (_, _) => OrderHistoryScreen(),
+                  path: '/sender/track-parcel',
+                  builder: (_, _) => TrackParcelScreen(),
                 ),
               ],
             ),
@@ -140,13 +143,19 @@ class AppRouter {
           path: '/sender/create-review',
           builder: (_, _) => CreateReviewScreen(),
         ),
-        /*
         GoRoute(
-          path: '/sender/delivery/:deliveryId',
-          builder: (_, state) => DeliveryDetailsScreen(
-            deliveryId: state.pathParameters['deliveryId']!,
-          ),
-        ),*/
+          path: '/sender/capture-parcel',
+          builder: (_, _) => CaptureParcelScreen(),
+        ),
+        GoRoute(
+          path: '/sender/track-parcel',
+          builder: (_, _) => TrackParcelScreen(),
+        ),
+        GoRoute(
+          path: '/sender/bulk-shipment-dashboard',
+          builder: (_, _) => BulkShipmentDashboardScreen(),
+        ),
+
         GoRoute(
           path: '/sender/finding-rider/:deliveryId',
           builder: (_, state) => FindingRiderScreen(
@@ -156,6 +165,10 @@ class AppRouter {
         GoRoute(
           path: '/sender/saved-addresses',
           builder: (_, _) => SavedAddressesScreen(),
+        ),
+        GoRoute(
+          path: '/sender/order-history',
+          builder: (_, _) => OrderHistoryScreen(),
         ),
         GoRoute(path: '/sender/rating', builder: (_, _) => RateRiderScreen()),
         GoRoute(
@@ -318,18 +331,21 @@ class _SenderNavBar extends StatelessWidget {
 
   static const _items = [
     (icon: Icons.home_outlined, label: 'Home'),
-    (icon: Icons.history, label: 'History'),
+    (icon: Icons.location_on_rounded, label: 'Track Parcel'),
     (icon: Icons.chat, label: 'Chat'),
     (icon: Icons.person_outline, label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
       ),
       child: SafeArea(
@@ -345,9 +361,7 @@ class _SenderNavBar extends StatelessWidget {
                 duration: Duration(milliseconds: 200),
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.orangePrimary
-                      : Colors.transparent,
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Row(
@@ -356,15 +370,15 @@ class _SenderNavBar extends StatelessWidget {
                       item.icon,
                       size: 20,
                       color: isSelected
-                          ? AppColors.surface
+                          ? colorScheme.surface
                           : AppColors.onSurfaceVariant,
                     ),
                     if (isSelected) ...[
                       SizedBox(width: 6),
                       Text(
                         item.label,
-                        style: AppFonts.labelMedium.copyWith(
-                          color: AppColors.surface,
+                        style: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.surface,
                         ),
                       ),
                     ],
@@ -414,11 +428,14 @@ class _RiderNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(30),
       ),
       child: SafeArea(
@@ -435,7 +452,7 @@ class _RiderNavBar extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.orangePrimary
+                      ? colorScheme.secondary
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -445,15 +462,15 @@ class _RiderNavBar extends StatelessWidget {
                       item.icon,
                       size: 20,
                       color: isSelected
-                          ? AppColors.surface
-                          : AppColors.onSurfaceVariant,
+                          ? colorScheme.surface
+                          : colorScheme.onSurfaceVariant,
                     ),
                     if (isSelected) ...[
                       SizedBox(width: 6),
                       Text(
                         item.label,
-                        style: AppFonts.labelMedium.copyWith(
-                          color: AppColors.surface,
+                        style: textTheme.labelMedium?.copyWith(
+                          color: colorScheme.surface,
                         ),
                       ),
                     ],

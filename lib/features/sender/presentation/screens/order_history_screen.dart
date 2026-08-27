@@ -12,7 +12,7 @@ class OrderHistoryScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Center(
         child: Column(
-          children: [Text('Order History', style: textTheme.displayMedium)],
+          children: [Text('Order History', style: textTheme.headlineMedium)],
         ),
       ),
     );

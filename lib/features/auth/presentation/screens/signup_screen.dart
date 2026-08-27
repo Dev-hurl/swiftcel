@@ -313,6 +313,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                           SizedBox(
                             width: double.infinity,
+                            height: 52,
                             child: ElevatedButton(
                               onPressed: authProvider.isSubmitting
                                   ? null
@@ -352,6 +353,32 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ],
                                     ),
                             ),
+                          ),
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(child: Divider()),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: Text(
+                                  'Or Continue With',
+                                  style: textTheme.labelSmall,
+                                ),
+                              ),
+                              Expanded(child: Divider()),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          _SocialButton(
+                            icon: Icons.g_mobiledata,
+                            label: 'Google',
+                            onTap: () {},
+                          ),
+                          SizedBox(height: 12),
+                          _SocialButton(
+                            icon: Icons.apple,
+                            label: 'Apple',
+                            onTap: () {},
                           ),
                           SizedBox(height: 16),
                           Center(
@@ -397,7 +424,7 @@ class _SignupScreenState extends State<SignupScreen> {
       prefixIcon: Icon(icon, size: 20),
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: AppColors.greyBg,
+      fillColor: AppColors.greyBgLight,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -472,5 +499,41 @@ class _FieldLabel extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Text(text, style: textTheme.labelMedium);
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  const _SocialButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      height: 52,
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 18),
+        label: Text(label, style: textTheme.labelMedium),
+        style: FilledButton.styleFrom(
+          backgroundColor: colorScheme.surfaceContainerLowest,
+          foregroundColor: colorScheme.onSurfaceVariant,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          side: BorderSide(color: colorScheme.surfaceContainerLow),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+    );
   }
 }

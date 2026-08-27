@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:swiftcel/core/constants/app_colors.dart';
 import 'package:swiftcel/features/auth/providers/auth_provider.dart';
 
 class OnboardingSlide {
@@ -32,13 +31,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Fast, Reliable Deliveries',
       subtitle:
           'Send parcels anywhere, anytime, with real-time tracking every step of the way.',
-      imagePath: 'assets/images/delivery.png',
+      imagePath: 'assets/images/courier.jpeg',
     ),
     OnboardingSlide(
       title: 'Trusted Riders Near You',
       subtitle:
           'Verified riders pick up and deliver your parcels safely and on time.',
-      imagePath: 'assets/images/rider.png',
+      imagePath: 'assets/images/Exchanging Boxes.jpeg',
     ),
     OnboardingSlide(
       title: 'Track in Real-time',
@@ -50,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Safe Delivery',
       subtitle:
           'Our secure network ensures your parcels arrive exactly as they left. Reliability is our core promise.',
-      imagePath: 'assets/images/ai_drone.png',
+      imagePath: 'assets/images/delivery.png',
     ),
   ];
 
@@ -89,14 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.surface,
-              AppColors.orangeContainer,
-            ],
-          ),
+          color: colorScheme.surfaceBright
         ),
         child: SafeArea(
           child: Column(

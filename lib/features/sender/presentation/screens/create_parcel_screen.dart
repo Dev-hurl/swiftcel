@@ -26,7 +26,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
   }
 
   Future<void> _capturePhoto() async {
-    // TODO: wire up image_picker — camera capture for auto size detection
+    context.push('/sender/capture-parcel');
   }
 
   void _continueToLocation() {
@@ -47,7 +47,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,7 +93,7 @@ class _CreateParcelScreenState extends State<CreateParcelScreen> {
                                 Icon(
                                   Icons.camera_alt_outlined,
                                   size: 32,
-                                  color: colorScheme.onSurfaceVariant,
+                                  color: colorScheme.primary,
                                 ),
                                 SizedBox(height: 8),
                                 Text(

@@ -216,15 +216,15 @@ class _SenderHomeState extends State<SenderHome> {
                 },
               ),
               _ActionItem(
-                icon: Icons.location_searching,
+                icon: Icons.receipt_rounded,
                 bg: AppColors.success.withValues(alpha: 0.2),
                 iconColor: AppColors.success,
-                label: 'Track item',
+                label: 'Order History',
                 onTap: () {
-                  // TODO: navigate to tracking screen
+                  context.push('/sender/order-history');
                 },
               ),
-              _ActionItem(
+              /*_ActionItem(
                 icon: Icons.location_on_outlined,
                 bg: Color(0xFFE3F2FD),
                 iconColor: Color(0xFF1565C0),
@@ -232,7 +232,7 @@ class _SenderHomeState extends State<SenderHome> {
                 onTap: () {
                   context.push('/sender/saved-address');
                 },
-              ),
+              ),*/
               _ActionItem(
                 icon: Icons.support_agent,
                 bg: Color(0xFFEFEBE9),

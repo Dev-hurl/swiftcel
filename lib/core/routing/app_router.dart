@@ -451,7 +451,7 @@ class _RiderNavBar extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? colorScheme.secondary
+                      ? colorScheme.primary
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(24),
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart' show AppColors;
@@ -52,6 +54,10 @@ class _SignupScreenState extends State<SignupScreen> {
       role: _selectedRole.name,
     );
 
+    if (success) {
+      TextInput.finishAutofillContext(shouldSave: true);
+    }
+
     if (!mounted) return;
 
     if (success) {
@@ -95,313 +101,337 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ],
                     ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Create Account',
-                            style: textTheme.displayMedium,
-                          ),
-                          SizedBox(height: 6),
-                          Text(
-                            'Join the fastest logistics network today.',
-                            style: textTheme.labelMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
+                    child: AutofillGroup(
+                      onDisposeAction: .commit,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Create Account',
+                              style: textTheme.displayMedium,
                             ),
-                          ),
-                          SizedBox(height: 24),
+                            SizedBox(height: 6),
+                            Text(
+                              'Join the fastest logistics network today.',
+                              style: textTheme.labelMedium?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            SizedBox(height: 24),
 
-                          // Sender / Rider toggle
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: colorScheme.surfaceContainerLow,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: _RoleToggleButton(
-                                    icon: Icons.person,
-                                    label: 'Sender',
-                                    isSelected:
-                                        _selectedRole == UserRole.sender,
-                                    onTap: () => setState(
-                                      () => _selectedRole = UserRole.sender,
+                            // Sender / Rider toggle
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: colorScheme.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: _RoleToggleButton(
+                                      icon: Icons.person,
+                                      label: 'Sender',
+                                      isSelected:
+                                          _selectedRole == UserRole.sender,
+                                      onTap: () => setState(
+                                        () => _selectedRole = UserRole.sender,
+                                      ),
                                     ),
                                   ),
+                                  Expanded(
+                                    child: _RoleToggleButton(
+                                      icon: Icons.pedal_bike,
+                                      label: 'Rider',
+                                      isSelected:
+                                          _selectedRole == UserRole.rider,
+                                      onTap: () => setState(
+                                        () => _selectedRole = UserRole.rider,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 24),
+
+                            _FieldLabel('Full Name'),
+                            SizedBox(height: 8),
+                            TextFormField(
+                              controller: _nameController,
+                              autofillHints: const [AutofillHints.name],
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Full name is required';
+                                }
+                                return null;
+                              },
+                              decoration: _inputDecoration(
+                                hint: 'John Doe',
+                                icon: Icons.badge_outlined,
+                              ),
+                            ),
+                            SizedBox(height: 18),
+
+                            _FieldLabel('Email Address'),
+                            SizedBox(height: 8),
+                            TextFormField(
+                              controller: _emailController,
+                              autofillHints: const [AutofillHints.newUsername],
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Email is required';
+                                }
+                                if (!RegExp(
+                                  r'^[\w.\-]+@([\w-]+\.)+[\w-]{2,4}$',
+                                ).hasMatch(value)) {
+                                  return 'Enter a valid email address';
+                                }
+                                return null;
+                              },
+                              decoration: _inputDecoration(
+                                hint: 'john@example.com',
+                                icon: Icons.mail_outline,
+                              ),
+                            ),
+                            SizedBox(height: 18),
+
+                            _FieldLabel('Phone Number'),
+                            SizedBox(height: 8),
+                            TextFormField(
+                              controller: _phoneController,
+                              autofillHints: const [
+                                AutofillHints.telephoneNumber,
+                              ],
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Phone number is required';
+                                }
+                                if (value.trim().length < 7) {
+                                  return 'Enter a valid phone number';
+                                }
+                                return null;
+                              },
+                              decoration: _inputDecoration(
+                                hint: '+1 (555) 000-0000',
+                                icon: Icons.phone_iphone,
+                              ),
+                            ),
+                            SizedBox(height: 18),
+
+                            _FieldLabel('Password'),
+                            SizedBox(height: 8),
+                            TextFormField(
+                              controller: _passwordController,
+                              autofillHints: const [AutofillHints.newPassword],
+                              obscureText: _obscurePassword,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password is required';
+                                }
+                                if (value.length < 6) {
+                                  return 'Password must be at least 6 characters';
+                                }
+                                return null;
+                              },
+                              decoration: _inputDecoration(
+                                hint: '••••••••',
+                                icon: Icons.lock_outline,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword,
+                                  ),
                                 ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: Checkbox(
+                                    value: _agreedToTerms,
+                                    activeColor: colorScheme.primary,
+                                    onChanged: (v) => setState(() {
+                                      _agreedToTerms = v ?? false;
+                                      if (_agreedToTerms)
+                                        _showTermsError = false;
+                                    }),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
                                 Expanded(
-                                  child: _RoleToggleButton(
-                                    icon: Icons.pedal_bike,
-                                    label: 'Rider',
-                                    isSelected: _selectedRole == UserRole.rider,
-                                    onTap: () => setState(
-                                      () => _selectedRole = UserRole.rider,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: textTheme.labelMedium?.copyWith(
+                                        color: colorScheme.onSurface,
+                                      ),
+                                      children: [
+                                        TextSpan(text: 'I agree to the '),
+                                        TextSpan(
+                                          text: 'Terms of Service',
+                                          style: textTheme.labelMedium
+                                              ?.copyWith(
+                                                color: colorScheme.secondary,
+                                              ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              // TODO: open Terms of Service
+                                            },
+                                        ),
+                                        TextSpan(
+                                          text: ' and ',
+                                          style: textTheme.labelMedium
+                                              ?.copyWith(
+                                                color: colorScheme.onSurface,
+                                              ),
+                                        ),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: textTheme.labelMedium
+                                              ?.copyWith(
+                                                color: colorScheme.secondary,
+                                              ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              // TODO: open Privacy Policy
+                                            },
+                                        ),
+                                        TextSpan(text: '.'),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 24),
-
-                          _FieldLabel('Full Name'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: _nameController,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Full name is required';
-                              }
-                              return null;
-                            },
-                            decoration: _inputDecoration(
-                              hint: 'John Doe',
-                              icon: Icons.badge_outlined,
-                            ),
-                          ),
-                          SizedBox(height: 18),
-
-                          _FieldLabel('Email Address'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Email is required';
-                              }
-                              if (!RegExp(
-                                r'^[\w.\-]+@([\w-]+\.)+[\w-]{2,4}$',
-                              ).hasMatch(value)) {
-                                return 'Enter a valid email address';
-                              }
-                              return null;
-                            },
-                            decoration: _inputDecoration(
-                              hint: 'john@example.com',
-                              icon: Icons.mail_outline,
-                            ),
-                          ),
-                          SizedBox(height: 18),
-
-                          _FieldLabel('Phone Number'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: _phoneController,
-                            keyboardType: TextInputType.phone,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Phone number is required';
-                              }
-                              if (value.trim().length < 7) {
-                                return 'Enter a valid phone number';
-                              }
-                              return null;
-                            },
-                            decoration: _inputDecoration(
-                              hint: '+1 (555) 000-0000',
-                              icon: Icons.phone_iphone,
-                            ),
-                          ),
-                          SizedBox(height: 18),
-
-                          _FieldLabel('Password'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: _obscurePassword,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Password is required';
-                              }
-                              if (value.length < 6) {
-                                return 'Password must be at least 6 characters';
-                              }
-                              return null;
-                            },
-                            decoration: _inputDecoration(
-                              hint: '••••••••',
-                              icon: Icons.lock_outline,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  size: 20,
-                                ),
-                                onPressed: () => setState(
-                                  () => _obscurePassword = !_obscurePassword,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: Checkbox(
-                                  value: _agreedToTerms,
-                                  activeColor: colorScheme.primary,
-                                  onChanged: (v) => setState(() {
-                                    _agreedToTerms = v ?? false;
-                                    if (_agreedToTerms) _showTermsError = false;
-                                  }),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: textTheme.labelMedium?.copyWith(
-                                      color: colorScheme.onSurface,
-                                    ),
-                                    children: [
-                                      TextSpan(text: 'I agree to the '),
-                                      TextSpan(
-                                        text: 'Terms of Service',
-                                        style: textTheme.labelMedium?.copyWith(
-                                          color: colorScheme.secondary,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            // TODO: open Terms of Service
-                                          },
-                                      ),
-                                      TextSpan(
-                                        text: ' and ',
-                                        style: textTheme.labelMedium?.copyWith(
-                                          color: colorScheme.onSurface,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'Privacy Policy',
-                                        style: textTheme.labelMedium?.copyWith(
-                                          color: colorScheme.secondary,
-                                        ),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            // TODO: open Privacy Policy
-                                          },
-                                      ),
-                                      TextSpan(text: '.'),
-                                    ],
+                            if (_showTermsError) ...[
+                              SizedBox(height: 6),
+                              Padding(
+                                padding: EdgeInsets.only(left: 34),
+                                child: Text(
+                                  'You must agree to continue',
+                                  style: textTheme.labelMedium?.copyWith(
+                                    color: AppColors.error,
                                   ),
                                 ),
                               ),
                             ],
-                          ),
-                          if (_showTermsError) ...[
-                            SizedBox(height: 6),
-                            Padding(
-                              padding: EdgeInsets.only(left: 34),
-                              child: Text(
-                                'You must agree to continue',
-                                style: textTheme.labelMedium?.copyWith(
-                                  color: AppColors.error,
+                            SizedBox(height: 22),
+
+                            SizedBox(
+                              width: double.infinity,
+                              height: 52,
+                              child: ElevatedButton(
+                                onPressed: authProvider.isSubmitting
+                                    ? null
+                                    : _createAccount,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorScheme.primary,
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+                                child: authProvider.isSubmitting
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: colorScheme.surfaceBright,
+                                        ),
+                                      )
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Create Account',
+                                            style: textTheme.labelLarge
+                                                ?.copyWith(
+                                                  color:
+                                                      colorScheme.surfaceBright,
+                                                ),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            color: colorScheme.surfaceBright,
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(child: Divider()),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
+                                  child: Text(
+                                    'Or Continue With',
+                                    style: textTheme.labelSmall,
+                                  ),
+                                ),
+                                Expanded(child: Divider()),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            _SocialButton(
+                              icon: SvgPicture.asset(
+                                'assets/icons/Google.svg',
+                                width: 18,
+                                height: 18,
+                              ),
+                              label: 'Google',
+                              onTap: () {},
+                            ),
+                            SizedBox(height: 12),
+                            _SocialButton(
+                              icon: SvgPicture.asset(
+                                'assets/icons/Apple.svg',
+                                width: 18,
+                                height: 18,
+                              ),
+                              label: 'Apple',
+                              onTap: () {},
+                            ),
+                            SizedBox(height: 16),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: textTheme.labelMedium?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  children: [
+                                    TextSpan(text: 'Already have an account? '),
+                                    TextSpan(
+                                      text: 'Log In',
+                                      style: textTheme.labelMedium?.copyWith(
+                                        color: colorScheme.primary,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => context.push('/login'),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ],
-                          SizedBox(height: 22),
-
-                          SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: ElevatedButton(
-                              onPressed: authProvider.isSubmitting
-                                  ? null
-                                  : _createAccount,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: colorScheme.primary,
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ),
-                              child: authProvider.isSubmitting
-                                  ? SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: colorScheme.surfaceBright,
-                                      ),
-                                    )
-                                  : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Create Account',
-                                          style: textTheme.labelLarge?.copyWith(
-                                            color: colorScheme.surfaceBright,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Icon(
-                                          Icons.arrow_forward,
-                                          color: colorScheme.surfaceBright,
-                                          size: 16,
-                                        ),
-                                      ],
-                                    ),
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: Divider()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12),
-                                child: Text(
-                                  'Or Continue With',
-                                  style: textTheme.labelSmall,
-                                ),
-                              ),
-                              Expanded(child: Divider()),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          _SocialButton(
-                            icon: Icons.g_mobiledata,
-                            label: 'Google',
-                            onTap: () {},
-                          ),
-                          SizedBox(height: 12),
-                          _SocialButton(
-                            icon: Icons.apple,
-                            label: 'Apple',
-                            onTap: () {},
-                          ),
-                          SizedBox(height: 16),
-                          Center(
-                            child: RichText(
-                              text: TextSpan(
-                                style: textTheme.labelMedium?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                                children: [
-                                  TextSpan(text: 'Already have an account? '),
-                                  TextSpan(
-                                    text: 'Log In',
-                                    style: textTheme.labelMedium?.copyWith(
-                                      color: colorScheme.primary,
-                                    ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => context.push('/login'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
@@ -503,7 +533,7 @@ class _FieldLabel extends StatelessWidget {
 }
 
 class _SocialButton extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final VoidCallback onTap;
   const _SocialButton({
@@ -522,7 +552,7 @@ class _SocialButton extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton.icon(
         onPressed: onTap,
-        icon: Icon(icon, size: 18),
+        icon: icon,
         label: Text(label, style: textTheme.labelMedium),
         style: FilledButton.styleFrom(
           backgroundColor: colorScheme.surfaceContainerLowest,
@@ -530,7 +560,7 @@ class _SocialButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 12),
           side: BorderSide(color: colorScheme.surfaceContainerLow),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),

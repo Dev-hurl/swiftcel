@@ -36,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Notifications', style: textTheme.headlineLarge),
+              Text('Reset Password', style: textTheme.headlineMedium),
               SizedBox(height: 24),
 
               Container(

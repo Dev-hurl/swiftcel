@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
@@ -27,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
       password: _passwordController.text,
     );
 
+    if (success) {
+      TextInput.finishAutofillContext(shouldSave: true);
+    }
+
     if (!mounted) return;
 
     if (!success) {
@@ -34,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
+      return;
     }
   }
 
@@ -75,10 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 28,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -102,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: textTheme.headlineLarge,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Center(
                       child: Text(
                         'Sign in to pickup from where you left off',
@@ -110,69 +114,89 @@ class _LoginScreenState extends State<LoginScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    TextField(
-                      controller: _identifierController,
-                      decoration: InputDecoration(
-                        hintText: 'Email Address',
-                        hintStyle: textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        prefixIcon: const Icon(Icons.mail_outline, size: 20),
-                        filled: true,
-                        fillColor: colorScheme.surfaceContainerLowest,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.primary),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.error),
-                        ),
+                    SizedBox(height: 24),
+                    AutofillGroup(
+                      onDisposeAction: .commit,
+                      child: Column(
+                        children: [
+                          TextField(
+                            autofillHints: const [AutofillHints.email],
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            controller: _identifierController,
+                            decoration: InputDecoration(
+                              hintText: 'Email Address',
+                              hintStyle: textTheme.labelLarge?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              prefixIcon: Icon(Icons.mail_outline, size: 20),
+                              filled: true,
+                              fillColor: colorScheme.surfaceContainerLowest,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: AppColors.error),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 14),
+                          TextField(
+                            autofillHints: const [AutofillHints.password],
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.done,
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            onSubmitted: (_) => _login(),
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              hintStyle: textTheme.labelLarge?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              prefixIcon: Icon(Icons.lock_outline, size: 20),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  size: 20,
+                                ),
+                                onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: colorScheme.surfaceContainerLowest,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: AppColors.error,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 14),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            size: 20,
-                          ),
-                          onPressed: () => setState(
-                            () => _obscurePassword = !_obscurePassword,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: colorScheme.surfaceContainerLowest,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.primary),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.error),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Row(
                       children: [
                         Checkbox(
@@ -187,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const Spacer(),
+                        Spacer(),
                         TextButton(
                           onPressed: () => context.go('/forgot-password'),
                           child: Text(
@@ -200,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
                       height: 52,
@@ -208,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: authProvider.isSubmitting ? null : _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: colorScheme.primary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -230,29 +254,37 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       children: [
-                        const Expanded(child: Divider()),
+                        Expanded(child: Divider()),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 12),
                           child: Text(
                             'Or Continue With',
                             style: textTheme.labelSmall,
                           ),
                         ),
-                        const Expanded(child: Divider()),
+                        Expanded(child: Divider()),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     _SocialButton(
-                      icon: Icons.g_mobiledata,
+                      icon: SvgPicture.asset(
+                        'assets/icons/Google.svg',
+                        width: 18,
+                        height: 18,
+                      ),
                       label: 'Google',
                       onTap: () {},
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     _SocialButton(
-                      icon: Icons.apple,
+                      icon: SvgPicture.asset(
+                        'assets/icons/Apple.svg',
+                        width: 18,
+                        height: 18,
+                      ),
                       label: 'Apple',
                       onTap: () {},
                     ),
@@ -303,7 +335,7 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class _SocialButton extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final VoidCallback onTap;
   const _SocialButton({
@@ -322,7 +354,7 @@ class _SocialButton extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton.icon(
         onPressed: onTap,
-        icon: Icon(icon, size: 18),
+        icon: icon,
         label: Text(label, style: textTheme.labelMedium),
         style: FilledButton.styleFrom(
           backgroundColor: colorScheme.surfaceContainerLowest,

@@ -24,7 +24,7 @@ class TrackParcelScreen extends StatelessWidget {
               subtitle: Text('#12WE4'),
               trailing: IconButton(
                 onPressed: () {
-                  context.push('/sender/bulk-shipment-dashboard');
+                  context.push('/sender/bulk-shipment/test123');
                 },
                 icon: Icon(Icons.chevron_right),
               ),

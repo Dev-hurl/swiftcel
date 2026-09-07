@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swiftcel/core/constants/app_colors.dart';
-import 'package:swiftcel/core/constants/app_fonts.dart';
 import 'package:swiftcel/features/auth/presentation/screens/forgot_password.dart';
 import 'package:swiftcel/features/auth/presentation/screens/login_screen.dart';
 import 'package:swiftcel/features/auth/presentation/screens/onboarding_screen.dart';
@@ -152,7 +151,7 @@ class AppRouter {
           builder: (_, _) => TrackParcelScreen(),
         ),
         GoRoute(
-          path: '/sender/bulk-shipment-dashboard',
+          path: '/sender/bulk-shipment/:shipmentID',
           builder: (_, _) => BulkShipmentDashboardScreen(),
         ),
 
